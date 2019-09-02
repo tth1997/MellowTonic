@@ -5,72 +5,81 @@ using UnityEngine;
 
 public class CarMovementScript : MonoBehaviour
 {
-
-    float horizontalInput;
-    float verticalInput;
-    float steeringAngle;
-    float maxSteerAngle = 30f;
-
+    // Wheel Colliders
     private Rigidbody carRB;
     public WheelCollider frontLeftW, frontRightW;
     public WheelCollider rearLeftW, rearRightW;
     public Transform frontLeftT, frontRightT;
     public Transform rearLeftT, rearRightT;
 
+    // Acceleration
     CarAccelerationPID AccelPID = new CarAccelerationPID();
     public float pid_Kp1 = 1f;
     public float pid_Ki1 = 1f;
     public float pid_Kd1 = 1f;
-    public float maxMotorForce = 1000f;
-    public float minMotorForce = -100f;
+
+    float verticalInput
+    {
+        get
+        {
+            return Input.GetAxis("Vertical");
+        }
+    }
+    public float maxMotorForce;
+    public float minMotorForce;
+
+    public float motorForce;
+    float brakeForce = 50000f;
+    public float carVel
+    {
+        get
+        {
+            return carRB.velocity.magnitude;
+        }
+    }
+    public float targetVel;
+
     public bool PIDActive;
 
+    // Steering
     CarSteeringPID SteerPID = new CarSteeringPID();
-    public Transform mouseAimTransform;
+    public GameObject mouseRigObject;
+
+    float steerRotation;
+
     public float pid_Kp2 = 1f;
     public float pid_Ki2 = 1f;
     public float pid_Kd2 = 1f;
 
-    public float inputDelay;
-    public float horizInputSens = 0.2f;
-    public float horizInputGrav = 1f;
-    float inputSensModerator;
     float steeringTarget;
-    
-    public float motorForce;
-    float brakeForce = 50000f;
-    public float carVel;
-    public float targetVel;
+    float steeringAngle;
+    float maxSteerAngle = 30f;
 
+    public float inputDelay;
+    List<float> mouseAimYRotations = new List<float>();
+
+    // Text & UI
     public Text speedText;
     public Text verticalAxisText;
 
+        // START BLOCK //
     void Start()
     {
+        CheckVariables();
+
         carRB = GetComponent<Rigidbody>();
         InitializeAccelPID();
         InitializeSteerPID();
         PIDActive = false;
-        StartCoroutine(InputDelay());
     }
 
-    void Update()
+    void CheckVariables()
     {
-        GetInput();
+        if (maxMotorForce <= 0 || minMotorForce <= 0)
+            Debug.LogError("Min and max motor forces must be greater than zero.");
 
-        if (speedText != null)
-            speedText.text = Mathf.Round(carVel * 3.6f).ToString() + "km/h";
-
-        if (verticalAxisText != null)
-            verticalAxisText.text = "VertAxis: " + Input.GetAxis("Vertical").ToString();
-
-        Accelerate();
-    }
-
-    private void FixedUpdate()
-    {
-        Steer();
-        //UpdateWheelPoses();
+        if (mouseRigObject == null)
+            Debug.LogError("mouseRigObject not specified. Make sure that the MouseRig prefab is in the scene.");
     }
 
     private void InitializeAccelPID()
@@ -89,70 +98,44 @@ public class CarMovementScript : MonoBehaviour
         SteerPID.outputMax = maxSteerAngle;
         SteerPID.outputMin = -maxSteerAngle;
     }
+        // END START BLOCK //
 
-    IEnumerator InputDelay()
+        // UPDATE BLOCK //
+    void Update()
     {
-        while (true)
-        {
-            if (Input.GetKey(KeyCode.D))
-            {
-                yield return new WaitForSeconds(inputDelay);
-                steeringTarget = 1f;
-                Debug.Log("Input delayed by " + inputDelay);
+        if (speedText != null)
+            speedText.text = Mathf.Round(carVel * 3.6f).ToString() + "km/h";
 
-            }
-            else if (Input.GetKey(KeyCode.A))
-            {
-                yield return new WaitForSeconds(inputDelay);
-                steeringTarget = -1f;
-                Debug.Log("Input delayed by " + inputDelay);
-            }
-            else
-            {
-                steeringTarget = 0f;
-            }
-            yield return null;
-        }
+        if (verticalAxisText != null)
+            verticalAxisText.text = "VertAxis: " + Input.GetAxis("Vertical").ToString();
+
+        Accelerate();
     }
-    void GetInput()
+
+    void Accelerate()
     {
-        verticalInput = Input.GetAxis("Vertical");
-
-
-        inputSensModerator = Mathf.Clamp(5 / carVel, 0, 1);
-
-        if (steeringTarget > 0)
+        // Acceleration & Reverse
+        if (Input.GetAxis("Vertical") == 0)
         {
-            if (horizontalInput >= 0)
-            {
-                horizontalInput = steeringOut(steeringTarget);
-            }
-            else
-            {
-                horizontalInput = steeringIn(steeringTarget);
-            }
+            PIDActive = true;
         }
-        else if (steeringTarget < 0)
+        if (Input.GetAxis("Vertical") != 0)
         {
-            if (horizontalInput <= 0)
-            {
-                horizontalInput = steeringOut(steeringTarget);
-            }
-            else
-            {
-                horizontalInput = steeringIn(steeringTarget);
-            }
+            PIDActive = false;
+            targetVel = carVel;
         }
-        else
+
+        // Acceleration PID
+        if (!PIDActive)
         {
-            if (horizontalInput < 0)
-            {
-                horizontalInput = steeringIn(1);
-            }
-            else if (horizontalInput > 0)
-            {
-                horizontalInput = steeringIn(-1);
-            }
+            frontLeftW.motorTorque = verticalInput * maxMotorForce;
+            frontRightW.motorTorque = verticalInput * maxMotorForce;
+        }
+        if (PIDActive)
+        {
+            motorForce = AccelPID.Cycle(carVel, targetVel, Time.fixedDeltaTime);
+            frontLeftW.motorTorque = motorForce;
+            frontRightW.motorTorque = motorForce;
         }
 
         // Braking
@@ -167,53 +150,47 @@ public class CarMovementScript : MonoBehaviour
             frontRightW.brakeTorque = 0f;
         }
     }
+        // END UPDATE BLOCK //
 
-    float steeringOut(float target)
+        // FIXEDUPDATE BLOCK //
+    // Note that the FixedUpdate loop runs at 50 frames per second by default.
+    private void FixedUpdate()
     {
-        return Mathf.Clamp(horizontalInput + (target * horizInputSens) * inputSensModerator * Time.deltaTime, -1f, 1f);
+        InputDelay();
+        Steer();
+        //UpdateWheelPoses();
     }
-    float steeringIn(float target)
+
+    void InputDelay()
     {
-        return Mathf.Clamp(horizontalInput + (target * horizInputGrav) * inputSensModerator * Time.deltaTime, -1f, 1f);
+
+        mouseAimYRotations.Insert(0, mouseRigObject.GetComponent<MouseController>().mouseAimTransform.rotation.eulerAngles.y);
+
+        // Delete any rotations that have persisted for more than 3 seconds.
+        if (mouseAimYRotations.Count > Mathf.RoundToInt(3f / Time.fixedDeltaTime))
+        {
+            mouseAimYRotations.RemoveAt(mouseAimYRotations.Count - 1);
+        }
+
+        steerRotation = mouseAimYRotations[Mathf.RoundToInt(inputDelay / Time.fixedDeltaTime)];
     }
 
     void Steer()
     {
-        // Old A/D steering
-
-        //steeringAngle = maxSteerAngle * horizontalInput;
-        steeringAngle = SteerPID.Cycle(transform.rotation.eulerAngles.y, mouseAimTransform.rotation.eulerAngles.y, Time.fixedDeltaTime);
+        // If player right-clicks, the steeringAngle will not recieve any new data, which allows
+        // the player to move the camera around without steering the car.
+        if (!Input.GetKey(KeyCode.Mouse1))
+        {
+            steeringAngle = SteerPID.Cycle(transform.rotation.eulerAngles.y, 
+                                           steerRotation, 
+                                           Time.fixedDeltaTime);
+        }
+        else
+        {
+            steeringAngle = 0;
+        }
         frontLeftW.steerAngle = steeringAngle;
         frontRightW.steerAngle = steeringAngle;
-    }
-
-    void Accelerate()
-    {
-        carVel = carRB.velocity.magnitude;
-
-        if (Input.GetAxis("Vertical") == 0)
-        {
-            PIDActive = true;
-        }
-        if (Input.GetAxis("Vertical") != 0)
-        {
-            PIDActive = false;
-            targetVel = carVel;
-        }
-
-        if (!PIDActive)
-        {
-            frontLeftW.motorTorque = verticalInput * maxMotorForce;
-            frontRightW.motorTorque = verticalInput * maxMotorForce;
-        }
-
-        if (PIDActive)
-        {
-            motorForce = AccelPID.Cycle(carVel, targetVel, Time.fixedDeltaTime);
-            frontLeftW.motorTorque = motorForce;
-            frontRightW.motorTorque = motorForce;
-        }
-        
     }
 
     void UpdateWheelPoses()
@@ -236,8 +213,12 @@ public class CarMovementScript : MonoBehaviour
         Wtransform.position = pos;
         Wtransform.localRotation = quat;
     }
+        // END FIXEDUPDATE BLOCK //
 }
 
+/// <summary>
+/// PID controller used for controlling car acceleration.
+/// </summary>
 public class CarAccelerationPID
 {
     public float Kp;
@@ -248,7 +229,6 @@ public class CarAccelerationPID
     public float outputMin;
 
     public float preError;
-
     public float integral;
     public float derivative;
     public float output;
@@ -265,6 +245,9 @@ public class CarAccelerationPID
     }
 }
 
+/// <summary>
+/// PID controller used for controlling steering. 'Cycle' output should be used to determine steering angle.
+/// </summary>
 public class CarSteeringPID
 {
     public float Kp;
@@ -273,10 +256,10 @@ public class CarSteeringPID
 
     public float outputMax;
     public float outputMin;
+
     public float preError;
     public float integral;
     public float derivative;
-
     public float output;
 
     public float Cycle(float currentDirection, float targetDirection, float Dt)
@@ -287,7 +270,6 @@ public class CarSteeringPID
         output = Mathf.Clamp(error * Kp + integral * Ki + derivative * Kd, outputMin, outputMax);
 
         preError = error;
-        Debug.Log(error * Kp);
         return output;
     }
 }
