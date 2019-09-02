@@ -15,6 +15,10 @@ public class mainMenuController : MonoBehaviour
     {
         SceneManager.LoadScene("scene0", LoadSceneMode.Single);
     }
+    public void Options()
+    {
+        SceneManager.LoadScene("scene1", LoadSceneMode.Single);
+    }
     public void Exit()
     {
         Application.Quit();
