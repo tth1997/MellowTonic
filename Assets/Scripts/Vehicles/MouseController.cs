@@ -15,19 +15,17 @@ public class MouseController : MonoBehaviour
 
     [SerializeField]
     float camSmoothSpeed = 3f;
-    float mouseSens = 2f;
+    float mouseSens = 0.5f;
     float aimDistance = 500f;
 
     /// <summary>
-    /// Get a point along the aircraft's boresight projected out to aimDistance meters.
-    /// Useful for drawing a crosshair to aim fixed forward guns with, or to indicate what
-    /// direction the aircraft is pointed.
+    /// Get a point projected out to aimDistance meters along the forward direction of the player's car.
     /// </summary>
-    public Vector3 CursorPos
+    public Vector3 ForwardAimPos
     {
         get
         {
-            /// if 'playerCarTransform' is null, then '?' will return; otherwise, ':' will be return
+            /// if 'playerCarTransform' is null, then '?' will return; otherwise, ':' will be returned
             return playerCarTransform == null
                 ? transform.forward * aimDistance
                 : (playerCarTransform.forward * aimDistance) + playerCarTransform.position;
@@ -35,7 +33,7 @@ public class MouseController : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the position that the mouse is indicating the aircraft should fly, projected
+    /// Get the position that the mouse is indicating the car should drive towards, projected
     /// out to aimDistance meters. Also meant to be used to draw a mouse cursor.
     /// </summary>
     public Vector3 MouseAimPos
@@ -48,16 +46,34 @@ public class MouseController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// The desired rotaion angle of the mouseAimTransform (in degrees).
+    /// </summary>
+    public Vector2 LookAngle
+    {
+        get
+        {
+            mouseX += Input.GetAxis("Mouse X") * mouseSens;
+            mouseY += -Input.GetAxis("Mouse Y") * mouseSens;
+            return new Vector2(mouseY, mouseX);
+        }
+    }
+
     private void Awake()
     {
         mouseX = 0;
         mouseY = 0;
     }
 
+    private void Start()
+    {
+        if (!playerCarTransform)
+            Debug.LogError("playerCarTransform is not specified. Make sure that the PlayerCar prefab is in the scene.");
+    }
+
     void Update()
     {
         RotateRig();
-
         UpdateCameraPos();
     }
 
@@ -66,16 +82,9 @@ public class MouseController : MonoBehaviour
         if (mouseAimTransform == null || cameraTransform == null || camRigTransform == null)
             return;
 
-        // Mouse input. 
-        mouseX += Input.GetAxis("Mouse X") * mouseSens;
-        mouseY += -Input.GetAxis("Mouse Y") * mouseSens;
-
-        // Rotate the aim target that the plane is meant to fly towards.
-        // Use the camera's axes in world space so that mouse motion is intuitive.
-        //mouseAimTransform.Rotate(cameraTransform.right, mouseY, Space.World);
-        //mouseAimTransform.Rotate(cameraTransform.up, mouseX, Space.World);
-
-        mouseAimTransform.eulerAngles = new Vector3(Mathf.LerpAngle(mouseAimTransform.eulerAngles.x, mouseY, mouseAimSmoothCoef), Mathf.LerpAngle(mouseAimTransform.eulerAngles.y, mouseX, mouseAimSmoothCoef), mouseAimTransform.eulerAngles.z);
+        mouseAimTransform.eulerAngles = new Vector3(Mathf.LerpAngle(mouseAimTransform.eulerAngles.x, LookAngle.x, mouseAimSmoothCoef),
+                                                    Mathf.LerpAngle(mouseAimTransform.eulerAngles.y, LookAngle.y, mouseAimSmoothCoef),
+                                                    mouseAimTransform.eulerAngles.z);
 
         // The up vector of the camera normally is aligned to the horizon. However, when
         // looking straight up/down this can feel a bit weird. At those extremes, the camera

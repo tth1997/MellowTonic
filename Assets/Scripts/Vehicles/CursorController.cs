@@ -25,7 +25,7 @@ public class CursorController : MonoBehaviour
     {
         if (cursorTransform != null)
         {
-            cursorTransform.position = playerCamera.WorldToScreenPoint(controller.CursorPos);
+            cursorTransform.position = playerCamera.WorldToScreenPoint(controller.ForwardAimPos);
             cursorTransform.gameObject.SetActive(cursorTransform.position.z > 1f);
         }
 
