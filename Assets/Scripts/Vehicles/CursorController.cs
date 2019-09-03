@@ -6,7 +6,7 @@ public class CursorController : MonoBehaviour
 {
     public MouseController mouseCtrl;
 
-    public RectTransform cursorTransform;
+    public RectTransform forwardAimTransform;
     public RectTransform mouseTransform;
 
     public Camera playerCamera;
@@ -23,10 +23,10 @@ public class CursorController : MonoBehaviour
 
     private void UpdateGraphics(MouseController controller)
     {
-        if (cursorTransform != null)
+        if (forwardAimTransform != null)
         {
-            cursorTransform.position = playerCamera.WorldToScreenPoint(controller.ForwardAimPos);
-            cursorTransform.gameObject.SetActive(cursorTransform.position.z > 1f);
+            forwardAimTransform.position = playerCamera.WorldToScreenPoint(controller.ForwardAimPos);
+            forwardAimTransform.gameObject.SetActive(forwardAimTransform.position.z > 1f);
         }
 
         if (mouseTransform != null)

@@ -55,7 +55,10 @@ public class CarMovementScript : MonoBehaviour
     float steeringAngle;
     float maxSteerAngle = 30f;
 
-    public float inputDelay;
+    public float inputDelayTime;
+    public int inputDelayFrames;
+    float inputDelayLimit = 0.5f;
+    float inputDelayRate = 0.001f;
     List<float> mouseAimYRotations = new List<float>();
 
     // Text & UI
@@ -78,6 +81,7 @@ public class CarMovementScript : MonoBehaviour
         if (maxMotorForce <= 0 || minMotorForce <= 0)
             Debug.LogError("Min and max motor forces must be greater than zero.");
 
+        mouseRigObject = GameObject.Find("MouseRig");
         if (mouseRigObject == null)
             Debug.LogError("mouseRigObject not specified. Make sure that the MouseRig prefab is in the scene.");
     }
@@ -141,13 +145,13 @@ public class CarMovementScript : MonoBehaviour
         // Braking
         if (Input.GetKey(KeyCode.Space))
         {
-            frontLeftW.brakeTorque = brakeForce;
-            frontRightW.brakeTorque = brakeForce;
+            rearLeftW.brakeTorque = brakeForce;
+            rearRightW.brakeTorque = brakeForce;
         }
         else
         {
-            frontLeftW.brakeTorque = 0f;
-            frontRightW.brakeTorque = 0f;
+            rearLeftW.brakeTorque = 0f;
+            rearRightW.brakeTorque = 0f;
         }
     }
         // END UPDATE BLOCK //
@@ -172,7 +176,11 @@ public class CarMovementScript : MonoBehaviour
             mouseAimYRotations.RemoveAt(mouseAimYRotations.Count - 1);
         }
 
-        steerRotation = mouseAimYRotations[Mathf.RoundToInt(inputDelay / Time.fixedDeltaTime)];
+        steerRotation = mouseAimYRotations[Mathf.RoundToInt(inputDelayTime / Time.fixedDeltaTime)];
+
+        inputDelayFrames = Mathf.RoundToInt(inputDelayTime / Time.fixedDeltaTime);
+
+        inputDelayTime += Mathf.Clamp(inputDelayRate * Time.fixedDeltaTime, 0, inputDelayLimit);
     }
 
     void Steer()

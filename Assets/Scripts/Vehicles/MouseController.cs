@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour
 {
+    public Vector3 rigOffset;
     public Transform playerCarTransform;
     public Transform mouseAimTransform;
     public Transform camRigTransform;
     public Transform cameraTransform;
+
+    public bool paused;
 
     float mouseX;
     float mouseY;
@@ -16,7 +19,7 @@ public class MouseController : MonoBehaviour
     [SerializeField]
     float camSmoothSpeed = 3f;
     float mouseSens = 0.5f;
-    float aimDistance = 500f;
+    float aimDistance = 50f;
 
     /// <summary>
     /// Get a point projected out to aimDistance meters along the forward direction of the player's car.
@@ -67,14 +70,19 @@ public class MouseController : MonoBehaviour
 
     private void Start()
     {
+        playerCarTransform = GameObject.FindGameObjectWithTag("Player").transform;
         if (!playerCarTransform)
             Debug.LogError("playerCarTransform is not specified. Make sure that the PlayerCar prefab is in the scene.");
+        else
+            transform.localPosition = rigOffset;
     }
 
     void Update()
     {
-        RotateRig();
-        UpdateCameraPos();
+        if (!paused)
+        {
+            RotateRig();
+        }
     }
 
     private void RotateRig()
@@ -98,15 +106,6 @@ public class MouseController : MonoBehaviour
                                   Quaternion.LookRotation(MouseAimPos - camRigTransform.position, upVec),
                                   camSmoothSpeed,
                                   Time.deltaTime);
-    }
-
-    private void UpdateCameraPos()
-    {
-        if (playerCarTransform != null)
-        {
-            // Move the whole rig to follow the aircraft.
-            transform.position = playerCarTransform.position;
-        }
     }
 
     private Quaternion Damp(Quaternion a, Quaternion b, float lambda, float dt)
