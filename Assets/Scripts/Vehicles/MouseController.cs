@@ -14,7 +14,7 @@ public class MouseController : MonoBehaviour
 
     float mouseX;
     float mouseY;
-    float mouseAimSmoothCoef = 2f;
+    float mouseAimSmoothCoef = 5f;
 
     [SerializeField]
     float camSmoothSpeed = 3f;
@@ -93,7 +93,18 @@ public class MouseController : MonoBehaviour
         mouseAimTransform.eulerAngles = new Vector3(Mathf.LerpAngle(mouseAimTransform.eulerAngles.x, LookAngle.x, mouseAimSmoothCoef),
                                                     Mathf.LerpAngle(mouseAimTransform.eulerAngles.y, LookAngle.y, mouseAimSmoothCoef),
                                                     mouseAimTransform.eulerAngles.z);
+    }
 
+    private void FixedUpdate()
+    {
+        if (!paused)
+        {
+            RotateCamera();
+        }
+    }
+
+    void RotateCamera()
+    {
         // The up vector of the camera normally is aligned to the horizon. However, when
         // looking straight up/down this can feel a bit weird. At those extremes, the camera
         // stops aligning to the horizon and instead aligns to itself.

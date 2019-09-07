@@ -50,15 +50,19 @@ public class CarMovementScript : MonoBehaviour
     public float pid_Kp2 = 1f;
     public float pid_Ki2 = 1f;
     public float pid_Kd2 = 1f;
+    public float currentSwayMagnitude;
+    float swayMagnitudeRate = 0.013f;
+    float swayMagnitudeLimit = 4f;
 
     float steeringTarget;
     float steeringAngle;
+    //public float steeringRateMax;
     float maxSteerAngle = 30f;
 
     public float inputDelayTime;
     public int inputDelayFrames;
     float inputDelayLimit = 0.5f;
-    float inputDelayRate = 0.001f;
+    float inputDelayRate = 0.0016f;
     List<float> mouseAimYRotations = new List<float>();
 
     // Text & UI
@@ -78,9 +82,6 @@ public class CarMovementScript : MonoBehaviour
 
     void CheckVariables()
     {
-        if (maxMotorForce <= 0 || minMotorForce <= 0)
-            Debug.LogError("Min and max motor forces must be greater than zero.");
-
         mouseRigObject = GameObject.Find("MouseRig");
         if (mouseRigObject == null)
             Debug.LogError("mouseRigObject not specified. Make sure that the MouseRig prefab is in the scene.");
@@ -147,6 +148,8 @@ public class CarMovementScript : MonoBehaviour
         {
             rearLeftW.brakeTorque = brakeForce;
             rearRightW.brakeTorque = brakeForce;
+            frontLeftW.motorTorque = minMotorForce;
+            frontRightW.motorTorque = minMotorForce;
         }
         else
         {
@@ -161,13 +164,13 @@ public class CarMovementScript : MonoBehaviour
     private void FixedUpdate()
     {
         InputDelay();
+        SteeringSway();
         Steer();
         //UpdateWheelPoses();
     }
 
     void InputDelay()
     {
-
         mouseAimYRotations.Insert(0, mouseRigObject.GetComponent<MouseController>().mouseAimTransform.rotation.eulerAngles.y);
 
         // Delete any rotations that have persisted for more than 3 seconds.
@@ -182,6 +185,12 @@ public class CarMovementScript : MonoBehaviour
 
         inputDelayTime += Mathf.Clamp(inputDelayRate * Time.fixedDeltaTime, 0, inputDelayLimit);
     }
+    void SteeringSway()
+    {
+        SteerPID.steeringSwayMagnitude = currentSwayMagnitude;
+
+        currentSwayMagnitude = Mathf.Clamp(currentSwayMagnitude + swayMagnitudeRate * Time.fixedDeltaTime, 0, swayMagnitudeLimit);
+    }
 
     void Steer()
     {
@@ -189,9 +198,17 @@ public class CarMovementScript : MonoBehaviour
         // the player to move the camera around without steering the car.
         if (!Input.GetKey(KeyCode.Mouse1))
         {
-            steeringAngle = SteerPID.Cycle(transform.rotation.eulerAngles.y, 
-                                           steerRotation, 
+            steeringAngle = SteerPID.Cycle(transform.rotation.eulerAngles.y,
+                                           steerRotation,
                                            Time.fixedDeltaTime);
+
+            /*
+            steeringAngle = Mathf.Clamp((SteerPID.Cycle(transform.rotation.eulerAngles.y,
+                                                        steerRotation,
+                                                        Time.fixedDeltaTime)),
+                                         steeringAngle - (steeringRateMax * Time.fixedDeltaTime),
+                                         steeringAngle + (steeringRateMax * Time.fixedDeltaTime));
+            */
         }
         else
         {
@@ -244,7 +261,7 @@ public class CarAccelerationPID
     public float Cycle(float currentSpeed, float targetSpeed, float Dt)
     {
         var error = targetSpeed - currentSpeed;
-        integral += error + Dt;
+        integral = Mathf.Clamp(integral + error + Dt, outputMin, outputMax);
         derivative = (error - preError) / Dt;
         output = Mathf.Clamp(error * Kp + integral * Ki + derivative * Kd, outputMin, outputMax);
 
@@ -265,6 +282,10 @@ public class CarSteeringPID
     public float outputMax;
     public float outputMin;
 
+    float steeringSway;
+    float steeringSwayPeriod = 5f;
+    public float steeringSwayMagnitude;
+
     public float preError;
     public float integral;
     public float derivative;
@@ -273,11 +294,18 @@ public class CarSteeringPID
     public float Cycle(float currentDirection, float targetDirection, float Dt)
     {
         var error = Mathf.DeltaAngle(currentDirection, targetDirection);
-        integral += error + Dt;
+
+        integral = Mathf.Clamp(integral + error + Dt, outputMin, outputMax);
+
         derivative = (error - preError) / Dt;
+        
+        steeringSway += (Mathf.PI / steeringSwayPeriod) * Time.fixedDeltaTime;
+        if (steeringSway >= 2 * Mathf.PI)
+            steeringSway = 0f;
+
         output = Mathf.Clamp(error * Kp + integral * Ki + derivative * Kd, outputMin, outputMax);
 
         preError = error;
-        return output;
+        return output + (Mathf.Sin(steeringSway) * steeringSwayMagnitude);
     }
 }

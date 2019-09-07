@@ -28384,17 +28384,5 @@ PrefabInstance:
       propertyPath: verticalAxisText
       value: 
       objectReference: {fileID: 231379390}
-    - target: {fileID: 1922860495, guid: 52e2ee3c851c6284097db5643c7bd5fb, type: 3}
-      propertyPath: rigOffset.x
-      value: -0.381
-      objectReference: {fileID: 0}
-    - target: {fileID: 1922860495, guid: 52e2ee3c851c6284097db5643c7bd5fb, type: 3}
-      propertyPath: rigOffset.y
-      value: 0.18
-      objectReference: {fileID: 0}
-    - target: {fileID: 1922860495, guid: 52e2ee3c851c6284097db5643c7bd5fb, type: 3}
-      propertyPath: rigOffset.z
-      value: 0.026
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52e2ee3c851c6284097db5643c7bd5fb, type: 3}
