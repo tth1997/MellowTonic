@@ -18,11 +18,11 @@ public class examplePhoneMsgScript : MonoBehaviour
 
     string yeet = "bruh";
 
-    List<string> currentDialogueLines;
+    public List<string> currentDialogueLines;
 
-    List<string> stop1DialogueLines;
+    public List<string> stop1DialogueLines;
 
-
+    //public List<string> blankTest;
 
     int lineNum;
 
@@ -36,12 +36,25 @@ public class examplePhoneMsgScript : MonoBehaviour
         "And here's a third bit. Hi, hello, how are you. I love refrigerator!"
         });
 
+        /*
+        blankTest = new List<string>(new string[]
+        {
+        "",
+        ""
+        });
+        */
+        
 
         currentDialogueLines = stop1DialogueLines;
 
         Debug.Log("Dialogue lines: " + currentDialogueLines.Count.ToString());
 
         StartCoroutine("DialogueCreaterCoroutine");
+    }
+
+    void Update()
+    {
+        //MsgClearCheck();
     }
 
     IEnumerator DialogueCreaterCoroutine()
@@ -82,4 +95,18 @@ public class examplePhoneMsgScript : MonoBehaviour
             yield return linesToScroll;
         }
     }
+    /*
+    private void MsgClearCheck()
+    {
+        GameObject playerCar = GameObject.Find("PlayerCar");
+        TextMessageClear messageClear = playerCar.GetComponent<TextMessageClear>();
+        
+        if(messageClear.clearMessage == true)
+        {
+            currentDialogueLines = blankTest;
+            Debug.Log("MESSSAGECLEAR");
+        }
+        //examplePhoneMsgScript phoneScript = playerCar.GetComponent<examplePhoneMsgScript>();
+    }
+    */
 }
