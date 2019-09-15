@@ -69,8 +69,8 @@ public class CarMovementScript : MonoBehaviour
     PostProcessVolume postProcVolume;
 
     DepthOfField depthOfField;
-    public float currentFocusDistance;
-    float focusDistanceRate = 0.0013f;
+    public float currentFocusDistance = 0.5f;
+    float focusDistanceRate = 0.000013f;
     float focusDistanceLimit = 0.5f;
 
     public Image blackoutImg;
@@ -218,7 +218,7 @@ public class CarMovementScript : MonoBehaviour
     }
     void CamBlur()
     {
-        currentFocusDistance = Mathf.Clamp(currentFocusDistance - focusDistanceRate * Time.fixedDeltaTime, 0.1f, 0.5f);
+        currentFocusDistance = Mathf.Clamp(currentFocusDistance - (focusDistanceRate * Time.fixedDeltaTime), 0.4f, 0.5f);
         depthOfField.focusDistance.value = currentFocusDistance;
     }
     void CamBlackout()
