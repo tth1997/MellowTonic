@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 
 public class CarMovementScript : MonoBehaviour
 {
@@ -56,7 +57,6 @@ public class CarMovementScript : MonoBehaviour
 
     float steeringTarget;
     float steeringAngle;
-    //public float steeringRateMax;
     float maxSteerAngle = 30f;
 
     public float inputDelayTime;
@@ -65,9 +65,25 @@ public class CarMovementScript : MonoBehaviour
     float inputDelayRate = 0.0016f;
     List<float> mouseAimYRotations = new List<float>();
 
+    // Fatigue Effects for Camera
+    PostProcessVolume postProcVolume;
+
+    DepthOfField depthOfField;
+    public float currentFocusDistance;
+    float focusDistanceRate = 0.0013f;
+    float focusDistanceLimit = 0.5f;
+
+    public Image blackoutImg;
+    Color fadeColor;
+    public float blackoutTimer; //The amount of time before blackouts start to occur. At rest stops, set blackoutTimer to Time.time + 180;
+    float blackoutRate = 20f; // The amount of time between blackouts.
+    float blackoutDuration = 0.5f;
+    bool isBlackingOut = false;
+    bool fadingIn;
+    bool fadingOut;
+
     // Text & UI
-    public Text speedText;
-    public Text verticalAxisText;
+    public Text speedTxt;
 
         // START BLOCK //
     void Start()
@@ -75,6 +91,14 @@ public class CarMovementScript : MonoBehaviour
         CheckVariables();
 
         carRB = GetComponent<Rigidbody>();
+        postProcVolume = GetComponentInChildren<PostProcessVolume>();
+        postProcVolume.profile.TryGetSettings(out depthOfField);
+        blackoutImg = GameObject.Find("BlackoutImg").GetComponent<Image>();
+        speedTxt = GameObject.Find("SpeedTxt").GetComponent<Text>();
+
+        blackoutImg.color = Color.clear;
+        fadeColor = Color.clear;
+
         InitializeAccelPID();
         InitializeSteerPID();
         PIDActive = false;
@@ -108,11 +132,8 @@ public class CarMovementScript : MonoBehaviour
         // UPDATE BLOCK //
     void Update()
     {
-        if (speedText != null)
-            speedText.text = Mathf.Round(carVel * 3.6f).ToString() + "km/h";
-
-        if (verticalAxisText != null)
-            verticalAxisText.text = "VertAxis: " + Input.GetAxis("Vertical").ToString();
+        if (speedTxt != null)
+            speedTxt.text = Mathf.Round(carVel * 3.6f).ToString() + "km/h";
 
         Accelerate();
     }
@@ -146,15 +167,16 @@ public class CarMovementScript : MonoBehaviour
         // Braking
         if (Input.GetKey(KeyCode.Space))
         {
-            rearLeftW.brakeTorque = brakeForce;
-            rearRightW.brakeTorque = brakeForce;
-            frontLeftW.motorTorque = minMotorForce;
-            frontRightW.motorTorque = minMotorForce;
+            frontLeftW.brakeTorque = brakeForce;
+            frontRightW.brakeTorque = brakeForce;
+            rearLeftW.motorTorque = minMotorForce;
+            rearRightW.motorTorque = minMotorForce;
+            targetVel = carVel;
         }
         else
         {
-            rearLeftW.brakeTorque = 0f;
-            rearRightW.brakeTorque = 0f;
+            frontLeftW.brakeTorque = 0f;
+            frontRightW.brakeTorque = 0f;
         }
     }
         // END UPDATE BLOCK //
@@ -163,10 +185,13 @@ public class CarMovementScript : MonoBehaviour
     // Note that the FixedUpdate loop runs at 50 frames per second by default.
     private void FixedUpdate()
     {
+        // Fatigue Effects
         InputDelay();
         SteeringSway();
+        CamBlur();
+        CamBlackout();
+
         Steer();
-        //UpdateWheelPoses();
     }
 
     void InputDelay()
@@ -191,6 +216,58 @@ public class CarMovementScript : MonoBehaviour
 
         currentSwayMagnitude = Mathf.Clamp(currentSwayMagnitude + swayMagnitudeRate * Time.fixedDeltaTime, 0, swayMagnitudeLimit);
     }
+    void CamBlur()
+    {
+        currentFocusDistance = Mathf.Clamp(currentFocusDistance - focusDistanceRate * Time.fixedDeltaTime, 0.1f, 0.5f);
+        depthOfField.focusDistance.value = currentFocusDistance;
+    }
+    void CamBlackout()
+    {
+        if (Time.time > blackoutTimer && !isBlackingOut)
+        {
+            isBlackingOut = true;
+            fadingIn = true;
+            fadingOut = false;
+            StartCoroutine(BlackoutFade());
+            Debug.Log("Blackout Coroutine Started.");
+        }
+    }
+    IEnumerator BlackoutFade()
+    {
+        while (true)
+        {
+            if (fadeColor.a < 1 && fadingIn)
+            {
+                fadeColor.a = Mathf.Clamp(fadeColor.a + Time.deltaTime, 0, 1);
+                blackoutImg.color = fadeColor;
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+
+            if (fadeColor.a == 1 && fadingIn)
+            {
+                float blackoutDuration = Random.Range(this.blackoutDuration, this.blackoutDuration + 2);
+                yield return new WaitForSeconds(blackoutDuration);
+                fadingIn = false;
+                fadingOut = true;
+            }
+
+            if (fadeColor.a > 0 && fadingOut)
+            {
+                fadeColor.a = Mathf.Clamp(fadeColor.a - Time.deltaTime, 0, 1);
+                blackoutImg.color = fadeColor;
+                yield return new WaitForSeconds(Time.deltaTime);
+            }
+
+            if (fadeColor.a == 0f && fadingOut)
+            {
+                yield return new WaitForSeconds(blackoutRate);
+                blackoutDuration += 0.1f;
+                fadingIn = true;
+                fadingOut = false;
+                Debug.Log("Blackout Coroutine Cycle complete.");
+            }
+        }
+    }
 
     void Steer()
     {
@@ -201,14 +278,6 @@ public class CarMovementScript : MonoBehaviour
             steeringAngle = SteerPID.Cycle(transform.rotation.eulerAngles.y,
                                            steerRotation,
                                            Time.fixedDeltaTime);
-
-            /*
-            steeringAngle = Mathf.Clamp((SteerPID.Cycle(transform.rotation.eulerAngles.y,
-                                                        steerRotation,
-                                                        Time.fixedDeltaTime)),
-                                         steeringAngle - (steeringRateMax * Time.fixedDeltaTime),
-                                         steeringAngle + (steeringRateMax * Time.fixedDeltaTime));
-            */
         }
         else
         {
@@ -232,8 +301,6 @@ public class CarMovementScript : MonoBehaviour
         Quaternion quat = Wtransform.rotation;
 
         collider.GetWorldPose(out pos, out quat);
-
-        //quat.eulerAngles = new Vector3(quat.eulerAngles.x, Wtransform.rotation.eulerAngles.y, Wtransform.rotation.eulerAngles.z);
 
         Wtransform.position = pos;
         Wtransform.localRotation = quat;

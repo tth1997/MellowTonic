@@ -64,8 +64,8 @@ public class MouseController : MonoBehaviour
 
     private void Awake()
     {
-        mouseX = 0;
-        mouseY = 0;
+        mouseX = mouseAimTransform.eulerAngles.y;
+        mouseY = mouseAimTransform.eulerAngles.x;
     }
 
     private void Start()
