@@ -11,15 +11,19 @@ public class MouseController : MonoBehaviour
     public Transform cameraTransform;
 
     public bool paused;
+    public bool relativeControl;
 
     float mouseX;
     float mouseY;
     float mouseAimSmoothCoef = 5f;
 
+    float snapLookAngleX;
+    float snapLookAngleY;
+
     [SerializeField]
     float camSmoothSpeed = 3f;
     float mouseSens = 0.5f;
-    float aimDistance = 50f;
+    float aimDistance = 200f;
 
     /// <summary>
     /// Get a point projected out to aimDistance meters along the forward direction of the player's car.
@@ -58,14 +62,34 @@ public class MouseController : MonoBehaviour
         {
             mouseX += Input.GetAxis("Mouse X") * mouseSens;
             mouseY += -Input.GetAxis("Mouse Y") * mouseSens;
+
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                snapLookAngleX = mouseX;
+                snapLookAngleY = mouseY;
+            }
+            if (Input.GetKeyUp(KeyCode.Mouse1))
+            {
+                mouseX = snapLookAngleX;
+                mouseY = snapLookAngleY;
+            }
             return new Vector2(mouseY, mouseX);
         }
     }
 
     private void Awake()
     {
-        mouseX = mouseAimTransform.eulerAngles.y;
-        mouseY = mouseAimTransform.eulerAngles.x;
+        if (relativeControl)
+        {
+            mouseY = mouseAimTransform.localEulerAngles.x;
+            mouseX = mouseAimTransform.localEulerAngles.y;
+        }
+        else
+        {
+            mouseY = mouseAimTransform.eulerAngles.x;
+            mouseX = mouseAimTransform.eulerAngles.y;
+        }
+
     }
 
     private void Start()
@@ -90,9 +114,18 @@ public class MouseController : MonoBehaviour
         if (mouseAimTransform == null || cameraTransform == null || camRigTransform == null)
             return;
 
-        mouseAimTransform.eulerAngles = new Vector3(Mathf.LerpAngle(mouseAimTransform.eulerAngles.x, LookAngle.x, mouseAimSmoothCoef),
-                                                    Mathf.LerpAngle(mouseAimTransform.eulerAngles.y, LookAngle.y, mouseAimSmoothCoef),
-                                                    mouseAimTransform.eulerAngles.z);
+        if (relativeControl)
+        {
+            mouseAimTransform.localEulerAngles = new Vector3(Mathf.LerpAngle(mouseAimTransform.localEulerAngles.x, LookAngle.x, mouseAimSmoothCoef),
+                                                             Mathf.LerpAngle(mouseAimTransform.localEulerAngles.y, LookAngle.y, mouseAimSmoothCoef),
+                                                             mouseAimTransform.localEulerAngles.z);
+        }
+        else
+        {
+            mouseAimTransform.eulerAngles = new Vector3(Mathf.LerpAngle(mouseAimTransform.eulerAngles.x, LookAngle.x, mouseAimSmoothCoef),
+                                                        Mathf.LerpAngle(mouseAimTransform.eulerAngles.y, LookAngle.y, mouseAimSmoothCoef),
+                                                        mouseAimTransform.eulerAngles.z);
+        }
     }
 
     private void FixedUpdate()

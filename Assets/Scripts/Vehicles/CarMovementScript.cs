@@ -51,31 +51,39 @@ public class CarMovementScript : MonoBehaviour
     public float pid_Kp2 = 1f;
     public float pid_Ki2 = 1f;
     public float pid_Kd2 = 1f;
-    public float currentSwayMagnitude;
-    float swayMagnitudeRate = 0.013f;
-    float swayMagnitudeLimit = 4f;
 
     float steeringTarget;
+    float steeringDamp = 0.25f;
     float steeringAngle;
     float maxSteerAngle = 30f;
 
-    public float inputDelayTime;
-    public int inputDelayFrames;
+    // Fatigue Effects for Steering
+    [HideInInspector]
+    public float currentSwayMagnitude; // RESET THIS TO 0 AT REST STOP
+    float swayMagnitudeRate = 0.013f;
+    float swayMagnitudeLimit = 4f;
+
+    [HideInInspector]
+    public float inputDelayTime; // RESET THIS TO 0 AT REST STOP
+    int inputDelayFrames;
     float inputDelayLimit = 0.5f;
     float inputDelayRate = 0.0016f;
     List<float> mouseAimYRotations = new List<float>();
 
     // Fatigue Effects for Camera
-    PostProcessVolume postProcVolume;
+    private PostProcessVolume postProcVolume;
 
-    DepthOfField depthOfField;
-    public float currentFocusDistance = 0.5f;
+    private DepthOfField depthOfField;
+    [HideInInspector]
+    public float currentFocusDistance = 0.5f; // RESET THIS TO 0.5f AT REST STOP
     float focusDistanceRate = 0.000013f;
-    float focusDistanceLimit = 0.5f;
+    float focusDistanceMax = 0.5f;
+    float focusDistanceMin = 0.14f;
 
     public Image blackoutImg;
     Color fadeColor;
-    public float blackoutTimer; //The amount of time before blackouts start to occur. At rest stops, set blackoutTimer to Time.time + 180;
+    [HideInInspector]
+    public float blackoutTimer = 60f; // RESET THIS TO Time.time + 180 AT REST STOP
     float blackoutRate = 20f; // The amount of time between blackouts.
     float blackoutDuration = 0.5f;
     bool isBlackingOut = false;
@@ -84,6 +92,8 @@ public class CarMovementScript : MonoBehaviour
 
     // Text & UI
     public Text speedTxt;
+
+
 
         // START BLOCK //
     void Start()
@@ -126,6 +136,7 @@ public class CarMovementScript : MonoBehaviour
         SteerPID.Kd = pid_Kd2;
         SteerPID.outputMax = maxSteerAngle;
         SteerPID.outputMin = -maxSteerAngle;
+        SteerPID.steeringDamp = steeringDamp;
     }
         // END START BLOCK //
 
@@ -196,7 +207,7 @@ public class CarMovementScript : MonoBehaviour
 
     void InputDelay()
     {
-        mouseAimYRotations.Insert(0, mouseRigObject.GetComponent<MouseController>().mouseAimTransform.rotation.eulerAngles.y);
+        mouseAimYRotations.Insert(0, mouseRigObject.GetComponent<MouseController>().mouseAimTransform.eulerAngles.y);
 
         // Delete any rotations that have persisted for more than 3 seconds.
         if (mouseAimYRotations.Count > Mathf.RoundToInt(3f / Time.fixedDeltaTime))
@@ -208,17 +219,24 @@ public class CarMovementScript : MonoBehaviour
 
         inputDelayFrames = Mathf.RoundToInt(inputDelayTime / Time.fixedDeltaTime);
 
-        inputDelayTime += Mathf.Clamp(inputDelayRate * Time.fixedDeltaTime, 0, inputDelayLimit);
+        inputDelayTime += Mathf.Clamp(inputDelayRate * Time.fixedDeltaTime, 
+                                      0, 
+                                      inputDelayLimit);
     }
     void SteeringSway()
     {
         SteerPID.steeringSwayMagnitude = currentSwayMagnitude;
 
-        currentSwayMagnitude = Mathf.Clamp(currentSwayMagnitude + swayMagnitudeRate * Time.fixedDeltaTime, 0, swayMagnitudeLimit);
+        currentSwayMagnitude = Mathf.Clamp(currentSwayMagnitude + swayMagnitudeRate * Time.fixedDeltaTime, 
+                                           0, 
+                                           swayMagnitudeLimit);
     }
     void CamBlur()
     {
-        currentFocusDistance = Mathf.Clamp(currentFocusDistance - (focusDistanceRate * Time.fixedDeltaTime), 0.4f, 0.5f);
+        currentFocusDistance = Mathf.Clamp(currentFocusDistance - (focusDistanceRate * Time.fixedDeltaTime), 
+                                           focusDistanceMin,
+                                           focusDistanceMax);
+
         depthOfField.focusDistance.value = currentFocusDistance;
     }
     void CamBlackout()
@@ -273,18 +291,16 @@ public class CarMovementScript : MonoBehaviour
     {
         // If player right-clicks, the steeringAngle will not recieve any new data, which allows
         // the player to move the camera around without steering the car.
+        
         if (!Input.GetKey(KeyCode.Mouse1))
         {
             steeringAngle = SteerPID.Cycle(transform.rotation.eulerAngles.y,
                                            steerRotation,
                                            Time.fixedDeltaTime);
+
+            frontLeftW.steerAngle = steeringAngle;
+            frontRightW.steerAngle = steeringAngle;
         }
-        else
-        {
-            steeringAngle = 0;
-        }
-        frontLeftW.steerAngle = steeringAngle;
-        frontRightW.steerAngle = steeringAngle;
     }
 
     void UpdateWheelPoses()
@@ -348,6 +364,7 @@ public class CarSteeringPID
 
     public float outputMax;
     public float outputMin;
+    public float steeringDamp;
 
     float steeringSway;
     float steeringSwayPeriod = 5f;
@@ -369,8 +386,8 @@ public class CarSteeringPID
         steeringSway += (Mathf.PI / steeringSwayPeriod) * Time.fixedDeltaTime;
         if (steeringSway >= 2 * Mathf.PI)
             steeringSway = 0f;
-
-        output = Mathf.Clamp(error * Kp + integral * Ki + derivative * Kd, outputMin, outputMax);
+      
+        output = Mathf.Clamp((error * Kp + integral * Ki + derivative * Kd) * steeringDamp, outputMin, outputMax);
 
         preError = error;
         return output + (Mathf.Sin(steeringSway) * steeringSwayMagnitude);
