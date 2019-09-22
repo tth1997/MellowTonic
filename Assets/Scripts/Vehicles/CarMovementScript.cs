@@ -23,7 +23,10 @@ public class CarMovementScript : MonoBehaviour
     {
         get
         {
-            return Input.GetAxis("Vertical");
+            return blackedOut == false // When blacked out
+                ? Input.GetAxis("Vertical")
+                : 0f;
+
         }
     }
     public float maxMotorForce;
@@ -53,18 +56,19 @@ public class CarMovementScript : MonoBehaviour
     public float pid_Kd2 = 1f;
 
     float steeringTarget;
-    float steeringDamp = 0.25f;
-    float steeringAngle;
+    //float steeringDamp = 1f;
+    public float steeringAngle;
+    float maxSteerRate = 120f; // How fast the wheels can steer (degrees per second)
     float maxSteerAngle = 30f;
 
     // Fatigue Effects for Steering
     [HideInInspector]
-    public float currentSwayMagnitude; // RESET THIS TO 0 AT REST STOP
+    public float currentSwayMagnitude;                                                          // RESET THIS TO 0 AT REST STOP
     float swayMagnitudeRate = 0.013f;
     float swayMagnitudeLimit = 4f;
 
     [HideInInspector]
-    public float inputDelayTime; // RESET THIS TO 0 AT REST STOP
+    public float inputDelayTime;                                                                // RESET THIS TO 0 AT REST STOP
     int inputDelayFrames;
     float inputDelayLimit = 0.5f;
     float inputDelayRate = 0.0016f;
@@ -75,18 +79,19 @@ public class CarMovementScript : MonoBehaviour
 
     private DepthOfField depthOfField;
     [HideInInspector]
-    public float currentFocusDistance = 0.5f; // RESET THIS TO 0.5f AT REST STOP
+    public float currentFocusDistance = 0.5f;                                                   // RESET THIS TO 0.5f AT REST STOP
     float focusDistanceRate = 0.000013f;
     float focusDistanceMax = 0.5f;
     float focusDistanceMin = 0.14f;
 
     public Image blackoutImg;
     Color fadeColor;
-    [HideInInspector]
-    public float blackoutTimer = 60f; // RESET THIS TO Time.time + 180 AT REST STOP
+    //[HideInInspector]
+    public float blackoutTimer;                                                                 // RESET THIS TO Time.time + 180 AT REST STOP
     float blackoutRate = 20f; // The amount of time between blackouts.
-    float blackoutDuration = 0.5f;
+    float blackoutBaseDuration = 0.1f;                                                          // RESET THIS TO 0.5f AT REST STOP
     bool isBlackingOut = false;
+    bool blackedOut = false;
     bool fadingIn;
     bool fadingOut;
 
@@ -112,6 +117,7 @@ public class CarMovementScript : MonoBehaviour
         InitializeAccelPID();
         InitializeSteerPID();
         PIDActive = false;
+        blackoutTimer += Time.time;
     }
 
     void CheckVariables()
@@ -136,7 +142,7 @@ public class CarMovementScript : MonoBehaviour
         SteerPID.Kd = pid_Kd2;
         SteerPID.outputMax = maxSteerAngle;
         SteerPID.outputMin = -maxSteerAngle;
-        SteerPID.steeringDamp = steeringDamp;
+        SteerPID.steeringDamp = 1;
     }
         // END START BLOCK //
 
@@ -152,11 +158,11 @@ public class CarMovementScript : MonoBehaviour
     void Accelerate()
     {
         // Acceleration & Reverse
-        if (Input.GetAxis("Vertical") == 0)
+        if (verticalInput == 0)
         {
             PIDActive = true;
         }
-        if (Input.GetAxis("Vertical") != 0)
+        if (verticalInput != 0)
         {
             PIDActive = false;
             targetVel = carVel;
@@ -176,7 +182,7 @@ public class CarMovementScript : MonoBehaviour
         }
 
         // Braking
-        if (Input.GetKey(KeyCode.Space))
+        if (!blackedOut && Input.GetKey(KeyCode.Space))
         {
             frontLeftW.brakeTorque = brakeForce;
             frontRightW.brakeTorque = brakeForce;
@@ -249,37 +255,47 @@ public class CarMovementScript : MonoBehaviour
             StartCoroutine(BlackoutFade());
             Debug.Log("Blackout Coroutine Started.");
         }
+        else
+        {
+            StopCoroutine(BlackoutFade());
+        }
     }
     IEnumerator BlackoutFade()
     {
         while (true)
         {
+            float fadeRate = Time.deltaTime / 2;
+
             if (fadeColor.a < 1 && fadingIn)
             {
-                fadeColor.a = Mathf.Clamp(fadeColor.a + Time.deltaTime, 0, 1);
+                fadeColor.a = Mathf.Clamp(fadeColor.a + fadeRate, 0, 1);
                 blackoutImg.color = fadeColor;
+                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp - fadeRate, 0, 1);
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
             if (fadeColor.a == 1 && fadingIn)
             {
-                float blackoutDuration = Random.Range(this.blackoutDuration, this.blackoutDuration + 2);
+                float blackoutDuration = Random.Range(blackoutBaseDuration, blackoutBaseDuration * 2);
+                blackedOut = true;
                 yield return new WaitForSeconds(blackoutDuration);
+                blackedOut = false;
                 fadingIn = false;
                 fadingOut = true;
             }
 
             if (fadeColor.a > 0 && fadingOut)
             {
-                fadeColor.a = Mathf.Clamp(fadeColor.a - Time.deltaTime, 0, 1);
+                fadeColor.a = Mathf.Clamp(fadeColor.a - (fadeRate * 4), 0, 1);
                 blackoutImg.color = fadeColor;
+                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp + fadeRate * 4, 0, 1);
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
             if (fadeColor.a == 0f && fadingOut)
             {
-                yield return new WaitForSeconds(blackoutRate);
-                blackoutDuration += 0.1f;
+                yield return new WaitForSeconds(blackoutRate); // This will delay the next blackout for blackoutRate seconds
+                blackoutBaseDuration += 0.1f;
                 fadingIn = true;
                 fadingOut = false;
                 Debug.Log("Blackout Coroutine Cycle complete.");
@@ -294,9 +310,12 @@ public class CarMovementScript : MonoBehaviour
         
         if (!Input.GetKey(KeyCode.Mouse1))
         {
-            steeringAngle = SteerPID.Cycle(transform.rotation.eulerAngles.y,
+            steeringAngle = Mathf.Clamp(
+                            SteerPID.Cycle(transform.rotation.eulerAngles.y,
                                            steerRotation,
-                                           Time.fixedDeltaTime);
+                                           Time.fixedDeltaTime),
+                            steeringAngle - (maxSteerRate * Time.fixedDeltaTime),
+                            steeringAngle + (maxSteerRate * Time.fixedDeltaTime));
 
             frontLeftW.steerAngle = steeringAngle;
             frontRightW.steerAngle = steeringAngle;
