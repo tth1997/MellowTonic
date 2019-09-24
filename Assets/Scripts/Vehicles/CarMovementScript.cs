@@ -6,6 +6,8 @@ using UnityEngine.Rendering.PostProcessing;
 
 public class CarMovementScript : MonoBehaviour
 {
+    // Steering Wheel
+    public Transform steeringWheel;
     // Wheel Colliders
     private Rigidbody carRB;
     public WheelCollider frontLeftW, frontRightW;
@@ -61,6 +63,8 @@ public class CarMovementScript : MonoBehaviour
     float maxSteerRate = 120f; // How fast the wheels can steer (degrees per second)
     float maxSteerAngle = 30f;
 
+    bool freeLook;
+
     // Fatigue Effects for Steering
     [HideInInspector]
     public float currentSwayMagnitude;                                                          // RESET THIS TO 0 AT REST STOP
@@ -95,6 +99,10 @@ public class CarMovementScript : MonoBehaviour
     bool fadingIn;
     bool fadingOut;
 
+    // Steering
+
+
+
     // Text & UI
     public Text speedTxt;
 
@@ -118,6 +126,7 @@ public class CarMovementScript : MonoBehaviour
         InitializeSteerPID();
         PIDActive = false;
         blackoutTimer += Time.time;
+        freeLook = false;
     }
 
     void CheckVariables()
@@ -153,6 +162,7 @@ public class CarMovementScript : MonoBehaviour
             speedTxt.text = Mathf.Round(carVel * 3.6f).ToString() + "km/h";
 
         Accelerate();
+        InputCheck();
     }
 
     void Accelerate()
@@ -196,6 +206,18 @@ public class CarMovementScript : MonoBehaviour
             frontRightW.brakeTorque = 0f;
         }
     }
+
+    void InputCheck()
+    {
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            freeLook = true;
+        }
+        else
+        {
+            freeLook = false;
+        }
+    }
         // END UPDATE BLOCK //
 
         // FIXEDUPDATE BLOCK //
@@ -209,6 +231,7 @@ public class CarMovementScript : MonoBehaviour
         CamBlackout();
 
         Steer();
+        UpdateSteeringWheel();
     }
 
     void InputDelay()
@@ -308,7 +331,7 @@ public class CarMovementScript : MonoBehaviour
         // If player right-clicks, the steeringAngle will not recieve any new data, which allows
         // the player to move the camera around without steering the car.
         
-        if (!Input.GetKey(KeyCode.Mouse1))
+        if (!freeLook)
         {
             steeringAngle = Mathf.Clamp(
                             SteerPID.Cycle(transform.rotation.eulerAngles.y,
@@ -319,6 +342,14 @@ public class CarMovementScript : MonoBehaviour
 
             frontLeftW.steerAngle = steeringAngle;
             frontRightW.steerAngle = steeringAngle;
+        }
+    }
+
+    void UpdateSteeringWheel()
+    {
+        if (!freeLook)
+        {
+            steeringWheel.eulerAngles = new Vector3(steeringWheel.eulerAngles.x, steeringWheel.eulerAngles.y, (transform.eulerAngles.y - steerRotation));
         }
     }
 

@@ -6,17 +6,16 @@ public class RestStopCheck : MonoBehaviour
 {
 
     public bool inRest;
-
+    private Animation phoneRestAnim;
     //public float inputDelayTimeRS;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        
 
-        
-        
+        phoneRestAnim = GetComponent<Animation>();
+
     }
 
     // Update is called once per frame
@@ -34,12 +33,12 @@ public class RestStopCheck : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
+
 
         if (other.tag == "RestStopTrigger")
         {
             inRest = true;
-            
+            phoneRestAnim.Play("phone_reststop1");
             Debug.Log("RestStop");
 
             
