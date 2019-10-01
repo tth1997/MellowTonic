@@ -27,6 +27,7 @@ public class RestStopCheck : MonoBehaviour
             CarMovementScript carMovementScript = playerCar.GetComponent<CarMovementScript>();
             carMovementScript.inputDelayTime = 0;
             carMovementScript.currentSwayMagnitude = 0;
+            phoneRestAnim.Play("phone_reststop1");
         }
         
     }
@@ -38,7 +39,6 @@ public class RestStopCheck : MonoBehaviour
         if (other.tag == "RestStopTrigger")
         {
             inRest = true;
-            phoneRestAnim.Play("phone_reststop1");
             Debug.Log("RestStop");
 
             

@@ -9148,6 +9148,48 @@ PrefabInstance:
       propertyPath: m_PlayAutomatically
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3437274281636319498, guid: 346c932364308404886de89ea0038861,
+        type: 3}
+      propertyPath: m_Text
+      value: 'So, what would you like for dinner, honey?
+
+
+
+
+        You say that, but you gut is on my side, hon. Especially when you''re stuffing
+        your face full of junk food all day.
+
+
+
+
+        I was asking you though
+
+
+
+        Great choice! I''ll get to it :)'
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437274281201947276, guid: 346c932364308404886de89ea0038861,
+        type: 3}
+      propertyPath: m_Text
+      value: '
+
+
+
+        Something wtih less veg than last night.
+
+
+
+
+
+
+
+
+        Fine, fine... Whatever you feel like, then.
+
+
+
+        Guess I''ll take the salad then...'
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2774241686611117541, guid: 346c932364308404886de89ea0038861, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 346c932364308404886de89ea0038861, type: 3}
