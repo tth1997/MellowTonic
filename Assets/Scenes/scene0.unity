@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.5748171, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11176,10 +11176,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785c89f56cbefbc478f8976773eb7aaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rigOffset: {x: 0, y: 0, z: 0}
   playerCarTransform: {fileID: 1350611212}
   mouseAimTransform: {fileID: 689029308}
   camRigTransform: {fileID: 684369900}
   cameraTransform: {fileID: 655282135}
+  paused: 0
+  relativeControl: 0
   camSmoothSpeed: 3
 --- !u!43 &1613525249
 Mesh:
