@@ -84,7 +84,6 @@ public class MouseController : MonoBehaviour
                 mouseX -= Mathf.DeltaAngle(transform.eulerAngles.y, mouseX) + angleLimit;
             }
 
-            Debug.Log("mouseX delta: " + Mathf.DeltaAngle(transform.eulerAngles.y, mouseX));
             return new Vector2(mouseY, mouseX);
         }
     }
