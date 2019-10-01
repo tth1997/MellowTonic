@@ -16,6 +16,8 @@ public class examplePhoneMsgScript : MonoBehaviour
 
     public List<string> stop2DialogueLines;
 
+    public List<string> stop3DialogueLines;
+
     //public List<string> blankTest;
 
     int lineNum = 0;
@@ -27,15 +29,21 @@ public class examplePhoneMsgScript : MonoBehaviour
 
         stop1DialogueLines = new List<string>(new string[] 
         {
-            "This will be the first block of dialogue. Blah blah blah. I'm just adding filler here to test that this text will actually wrap properly.",
+            "Hey, just stopping for a rest. long day",
             "Here's some more filler text. This should pop up " + messageDelayTime.ToString() + " seconds after the first bit.",
-            "And here's a third bit. Hi, hello, how are you. I love refrigerator!"
         });
 
         stop2DialogueLines = new List<string>(new string[]
         {
-            "Here is where Stop 2 dialogue starts. Girlfriend has dinner, etc. etc.",
-            "And here is another line, just for testing things. Testing testing testing. The quick brown fox jumped over the lazy dog."
+            "Here is where Stop 2 dialogue starts. Girlfriend has dinner, etc. etc." + messageDelayTime.ToString() +
+            "Pretty far... just really tired as well"
+        });
+
+        stop3DialogueLines = new List<string>(new string[]
+        {
+            "Hey. Get close I think. See soon." + messageDelayTime.ToString() + "Yep..." + messageDelayTime.ToString() + 
+            "I'm not that for now" + messageDelayTime.ToString() + "Before we met? What was that like?" + messageDelayTime.ToString() + "Oh...",
+            "Zack, is this what you expected?"
         });
 
         /*
