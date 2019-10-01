@@ -325,6 +325,7 @@ MonoBehaviour:
   currentFocusDistance: 0
   blackoutImg: {fileID: 0}
   blackoutTimer: 30
+  blackoutBaseDuration: 0.1
   speedTxt: {fileID: 0}
 --- !u!114 &6696457679924976875
 MonoBehaviour:
@@ -339,7 +340,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inRest: 0
-  phoneRestAnim: {fileID: 0}
 --- !u!114 &2774241686823489151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -672,6 +672,7 @@ MonoBehaviour:
   currentDialogueLines: []
   stop1DialogueLines: []
   stop2DialogueLines: []
+  stop3DialogueLines: []
 --- !u!1 &3437274280162634401
 GameObject:
   m_ObjectHideFlags: 0
@@ -1117,7 +1118,7 @@ Animation:
   m_Animations:
   - {fileID: 7400000, guid: 59b64937df69e2f499465b0528404f60, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 0
+  m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!114 &632300727579221864
@@ -1139,6 +1140,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2322318430025994809}
     m_Modifications:
+    - target: {fileID: 100006, guid: c4031917428652f4c985c8c59a27464c, type: 3}
+      propertyPath: m_Name
+      value: Smartphone
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: c4031917428652f4c985c8c59a27464c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.426
@@ -1195,10 +1200,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.5
       objectReference: {fileID: 0}
-    - target: {fileID: 100006, guid: c4031917428652f4c985c8c59a27464c, type: 3}
-      propertyPath: m_Name
-      value: Smartphone
-      objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.0011
@@ -1244,6 +1245,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6696457680504618259}
     m_Modifications:
+    - target: {fileID: 1223002772083156, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
+      propertyPath: m_Name
+      value: CivilianVehicle05
+      objectReference: {fileID: 0}
     - target: {fileID: 4407244999693362, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1292,15 +1297,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: -1
       objectReference: {fileID: 0}
-    - target: {fileID: 1223002772083156, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
-      propertyPath: m_Name
-      value: CivilianVehicle05
-      objectReference: {fileID: 0}
-    - target: {fileID: 64528906426131336, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4754648728455698, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.13052616
@@ -1335,6 +1331,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4754648728455698, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 64528906426131336, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -37,7 +37,7 @@ public class RestStopCheck : MonoBehaviour
             carMovementScript.currentFocusDistance = .5f;
             carMovementScript.blackoutTimer = Time.time + 180;
             carMovementScript.blackoutBaseDuration = .1f;
-            phoneRestAnim.Play("phone_reststop1");
+
         }
         
     }
@@ -49,6 +49,7 @@ public class RestStopCheck : MonoBehaviour
         if (other.tag == "RestStopTrigger")
         {
             inRest = true;
+            phoneRestAnim.Play("phone_reststop1");
             Debug.Log("RestStop");
 
             
