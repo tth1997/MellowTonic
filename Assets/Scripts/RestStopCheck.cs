@@ -5,6 +5,7 @@ using UnityEngine;
 public class RestStopCheck : MonoBehaviour
 {
     GameObject playerCar;
+    GameObject smartPhone;
     CarMovementScript carMovementScript;
 
     public bool inRest;
@@ -16,9 +17,11 @@ public class RestStopCheck : MonoBehaviour
     void Start()
     {
         playerCar = GameObject.Find("PlayerCar");
+        smartPhone = GameObject.Find("Smartphone");
+
         carMovementScript = playerCar.GetComponent<CarMovementScript>();
 
-        phoneRestAnim = GetComponent<Animation>();
+        phoneRestAnim = smartPhone.GetComponent<Animation>();
 
     }
 
