@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class RestStopCheck : MonoBehaviour
 {
+    GameObject playerCar;
+    CarMovementScript carMovementScript;
 
     public bool inRest;
     private Animation phoneRestAnim;
@@ -13,6 +15,8 @@ public class RestStopCheck : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerCar = GameObject.Find("PlayerCar");
+        carMovementScript = playerCar.GetComponent<CarMovementScript>();
 
         phoneRestAnim = GetComponent<Animation>();
 
@@ -23,10 +27,13 @@ public class RestStopCheck : MonoBehaviour
     {
         if(inRest == true)
         {
-            GameObject playerCar = GameObject.Find("PlayerCar");
-            CarMovementScript carMovementScript = playerCar.GetComponent<CarMovementScript>();
+            
+            
             carMovementScript.inputDelayTime = 0;
             carMovementScript.currentSwayMagnitude = 0;
+            carMovementScript.currentFocusDistance = .5f;
+            carMovementScript.blackoutTimer = Time.time + 180;
+            carMovementScript.blackoutBaseDuration = .1f;
             phoneRestAnim.Play("phone_reststop1");
         }
         

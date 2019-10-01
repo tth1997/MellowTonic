@@ -96,7 +96,7 @@ public class CarMovementScript : MonoBehaviour
     //[HideInInspector]
     public float blackoutTimer;                                                                 // RESET THIS TO Time.time + 180 AT REST STOP
     float blackoutRate = 20f; // The amount of time between blackouts.
-    float blackoutBaseDuration = 0.1f;                                                          // RESET THIS TO 0.5f AT REST STOP
+    public float blackoutBaseDuration = 0.1f;                                                          // RESET THIS TO 0.5f AT REST STOP
     bool isBlackingOut = false;
     bool blackedOut = false;
     bool fadingIn;
