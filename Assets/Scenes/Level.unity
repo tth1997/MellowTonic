@@ -9066,7 +9066,7 @@ PrefabInstance:
     - target: {fileID: 2322318430025994807, guid: 346c932364308404886de89ea0038861,
         type: 3}
       propertyPath: blackoutTimer
-      value: 10
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 2774241686695850755, guid: 346c932364308404886de89ea0038861,
         type: 3}

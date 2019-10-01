@@ -84,9 +84,12 @@ public class CarMovementScript : MonoBehaviour
     private DepthOfField depthOfField;
     [HideInInspector]
     public float currentFocusDistance = 0.5f;                                                   // RESET THIS TO 0.5f AT REST STOP
-    float focusDistanceRate = 0.000013f;
+    float focusDistanceRate = 0.0013f;
     float focusDistanceMax = 0.5f;
     float focusDistanceMin = 0.14f;
+
+    float focalLengthDefault = 5f;
+    float apertureDefault = 0.5f;
 
     public Image blackoutImg;
     Color fadeColor;
@@ -99,41 +102,40 @@ public class CarMovementScript : MonoBehaviour
     bool fadingIn;
     bool fadingOut;
 
-    // Steering
-
-
-
     // Text & UI
     public Text speedTxt;
-
 
 
         // START BLOCK //
     void Start()
     {
-        CheckVariables();
-
-        carRB = GetComponent<Rigidbody>();
-        postProcVolume = GetComponentInChildren<PostProcessVolume>();
-        postProcVolume.profile.TryGetSettings(out depthOfField);
-        blackoutImg = GameObject.Find("BlackoutImg").GetComponent<Image>();
-        speedTxt = GameObject.Find("SpeedTxt").GetComponent<Text>();
-
-        blackoutImg.color = Color.clear;
-        fadeColor = Color.clear;
+        InitializeVariables();
 
         InitializeAccelPID();
         InitializeSteerPID();
-        PIDActive = false;
-        blackoutTimer += Time.time;
-        freeLook = false;
     }
 
-    void CheckVariables()
+    void InitializeVariables()
     {
+        carRB = GetComponent<Rigidbody>();
         mouseRigObject = GameObject.Find("MouseRig");
         if (mouseRigObject == null)
             Debug.LogError("mouseRigObject not specified. Make sure that the MouseRig prefab is in the scene.");
+
+        postProcVolume = GetComponentInChildren<PostProcessVolume>();
+        postProcVolume.profile.TryGetSettings(out depthOfField);
+        depthOfField.aperture.value = apertureDefault;
+        depthOfField.focalLength.value = focalLengthDefault;
+
+        blackoutImg = GameObject.Find("BlackoutImg").GetComponent<Image>();
+        blackoutImg.color = Color.clear;
+        fadeColor = Color.clear;
+
+        speedTxt = GameObject.Find("SpeedTxt").GetComponent<Text>();
+
+        PIDActive = false;
+        blackoutTimer += Time.time;
+        freeLook = false;
     }
 
     private void InitializeAccelPID()

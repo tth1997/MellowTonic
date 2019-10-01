@@ -9,13 +9,14 @@ public class MouseController : MonoBehaviour
     public Transform mouseAimTransform;
     public Transform camRigTransform;
     public Transform cameraTransform;
+    float angleLimit = 150f;
 
     public bool paused;
     public bool relativeControl;
 
     float mouseX;
     float mouseY;
-    float mouseAimSmoothCoef = 5f;
+    float mouseAimSmoothCoef = 10f;
 
     float snapLookAngleX;
     float snapLookAngleY;
@@ -54,7 +55,7 @@ public class MouseController : MonoBehaviour
     }
 
     /// <summary>
-    /// The desired rotaion angle of the mouseAimTransform (in degrees).
+    /// The desired rotation angle of the mouseAimTransform (in degrees).
     /// </summary>
     public Vector2 LookAngle
     {
@@ -65,14 +66,25 @@ public class MouseController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                snapLookAngleX = mouseX;
-                snapLookAngleY = mouseY;
+                snapLookAngleX = mouseAimTransform.localEulerAngles.x;
+                snapLookAngleY = mouseAimTransform.localEulerAngles.y;
+
             }
             if (Input.GetKeyUp(KeyCode.Mouse1))
             {
-                mouseX = snapLookAngleX;
-                mouseY = snapLookAngleY;
+                mouseAimTransform.localEulerAngles = new Vector3(snapLookAngleX, snapLookAngleY, 0);
             }
+
+            if (Mathf.DeltaAngle(transform.eulerAngles.y, mouseX) > angleLimit)
+            {
+                mouseX -= Mathf.DeltaAngle(transform.eulerAngles.y, mouseX) - angleLimit;
+            }
+            else if (Mathf.DeltaAngle(transform.eulerAngles.y, mouseX) < -angleLimit)
+            {
+                mouseX -= Mathf.DeltaAngle(transform.eulerAngles.y, mouseX) + angleLimit;
+            }
+
+            Debug.Log("mouseX delta: " + Mathf.DeltaAngle(transform.eulerAngles.y, mouseX));
             return new Vector2(mouseY, mouseX);
         }
     }
@@ -121,10 +133,16 @@ public class MouseController : MonoBehaviour
                                                              mouseAimTransform.localEulerAngles.z);
         }
         else
+        
         {
             mouseAimTransform.eulerAngles = new Vector3(Mathf.LerpAngle(mouseAimTransform.eulerAngles.x, LookAngle.x, mouseAimSmoothCoef),
                                                         Mathf.LerpAngle(mouseAimTransform.eulerAngles.y, LookAngle.y, mouseAimSmoothCoef),
                                                         mouseAimTransform.eulerAngles.z);
+            /*
+            mouseAimTransform.eulerAngles = new Vector3(mouseAimTransform.eulerAngles.x,
+                                                        Mathf.Clamp(mouseAimTransform.eulerAngles.y, transform.eulerAngles.y - angleLimit, transform.eulerAngles.y + angleLimit),
+                                                        mouseAimTransform.eulerAngles.z);
+            */
         }
     }
 
@@ -147,9 +165,9 @@ public class MouseController : MonoBehaviour
 
         // Smoothly rotate the camera to face the mouse aim.
         camRigTransform.rotation = Damp(camRigTransform.rotation,
-                                  Quaternion.LookRotation(MouseAimPos - camRigTransform.position, upVec),
-                                  camSmoothSpeed,
-                                  Time.deltaTime);
+                                        Quaternion.LookRotation(MouseAimPos - camRigTransform.position, upVec),
+                                        camSmoothSpeed,
+                                        Time.deltaTime);
     }
 
     private Quaternion Damp(Quaternion a, Quaternion b, float lambda, float dt)
