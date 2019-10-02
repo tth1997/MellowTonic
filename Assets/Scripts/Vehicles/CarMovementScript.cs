@@ -43,6 +43,7 @@ public class CarMovementScript : MonoBehaviour
             return carRB.velocity.magnitude;
         }
     }
+    float oldCarVel;
     public float targetVel;
 
     public bool PIDActive;
@@ -108,6 +109,7 @@ public class CarMovementScript : MonoBehaviour
     // End-State
     public GameManagerScript gameManagerScript;
     float crashSpeed = 14f;
+    [SerializeField]
     bool hasCrashed = false;
 
 
@@ -241,6 +243,7 @@ public class CarMovementScript : MonoBehaviour
         UpdateSteeringWheel();
 
         CheckRoll();
+        CollisionCheck();
     }
 
     void InputDelay()
@@ -381,9 +384,6 @@ public class CarMovementScript : MonoBehaviour
         Wtransform.localRotation = quat;
     }
 
-
-
-
     void CheckRoll()
     {
         if (transform.eulerAngles.z < 180 && transform.eulerAngles.z > 45 && !hasCrashed)
@@ -397,29 +397,15 @@ public class CarMovementScript : MonoBehaviour
             hasCrashed = true;
         }
     }
-    // END FIXEDUPDATE BLOCK //
-
-    private void OnCollisionEnter(Collision collision)
+    void CollisionCheck()
     {
-        if (!hasCrashed)
+        if (Mathf.Abs(oldCarVel - carVel) > 10 && !hasCrashed)
         {
-            if (collision.rigidbody)
-            {
-                if (carVel - collision.rigidbody.velocity.magnitude > crashSpeed / 5) // If you run into another car at 10kph, you crash
-                {
-                    gameManagerScript.Crash();
-                    hasCrashed = true;
-                }
-            }
-            else
-            {
-                if (carVel > crashSpeed) // If you run into an unmoving object at 50kph, you crash
-                {
-                    gameManagerScript.Crash();
-                    hasCrashed = true;
-                }
-            }
+            gameManagerScript.Crash();
+            hasCrashed = true;
         }
+
+        oldCarVel = carVel;
     }
 }
 

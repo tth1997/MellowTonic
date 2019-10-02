@@ -34,13 +34,13 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.66
+    value: 5
   threshold:
     overrideState: 1
-    value: 5.94
+    value: 1
   softKnee:
     overrideState: 1
-    value: 0.5
+    value: 0.7
   clamp:
     overrideState: 1
     value: 1
@@ -58,7 +58,7 @@ MonoBehaviour:
     value: 0
   dirtTexture:
     overrideState: 0
-    value: {fileID: 0}
+    value: {fileID: 2800000, guid: 0b4c1564f776ac24f9df3708f138aeb6, type: 3}
     defaultState: 1
   dirtIntensity:
     overrideState: 0
