@@ -42,8 +42,7 @@ public class examplePhoneMsgScript : MonoBehaviour
         stop3DialogueLines = new List<string>(new string[]
         {
             "Hey. Get close I think. See soon." + messageDelayTime.ToString() + "Yep..." + messageDelayTime.ToString() + 
-            "I'm not that for now" + messageDelayTime.ToString() + "Before we met? What was that like?" + messageDelayTime.ToString() + "Oh...",
-            "Zack, is this what you expected?"
+            "I'm not that for now" + messageDelayTime.ToString() + "Before we met? What was that like?" + messageDelayTime.ToString() + "Oh..."
         });
 
         /*
