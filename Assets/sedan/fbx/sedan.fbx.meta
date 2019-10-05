@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ccb2ebebf48a04e1bb6bdfe2c617daf2
+guid: 15bcded0eddd19d4081cac7112c44ebe
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -75,22 +75,22 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material__dark_png
-    second: {fileID: 2100000, guid: 2a1d2023daff944d3bd72f90bf675df9, type: 2}
+    second: {fileID: 2100000, guid: 27869cba2466da0458b4650f920ca76a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material__glass_png
-    second: {fileID: 2100000, guid: 19dfc77c270e84d50a435366136d4348, type: 2}
+    second: {fileID: 2100000, guid: 850d812b84fbf1647b4f89b97a234f05, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material__mirror_png
-    second: {fileID: 2100000, guid: bea14e1f727b046059c55b1d4cd2ba39, type: 2}
+    second: {fileID: 2100000, guid: 22df07a8d76802b4daa1499b80708c98, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: unnamed
-    second: {fileID: 2100000, guid: f77ef2e829ee84b2a98484cbe04ac9d4, type: 2}
+    second: {fileID: 2100000, guid: 910cdfe463cee0d458cf031fd2ce6204, type: 2}
   materials:
     importMaterials: 1
     materialName: 3

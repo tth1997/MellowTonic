@@ -6,17 +6,33 @@ using UnityEngine;
 
 public class examplePhoneMsgScript : MonoBehaviour
 {
-    public Text exampleLHText;
+    public ScrollRect scrollRect;
+    public float scrollAmount;
+
+    Animation scrollAnim;
+
+    public Text LHText;
+    public Text RHText;
 
     public float messageDelayTime = 5f;
+    public List<string> currentDialogueLinesLH;
+    public List<string> currentDialogueLinesRH;
 
-    public List<string> currentDialogueLines;
-
-    public List<string> stop1DialogueLines;
-
-    public List<string> stop2DialogueLines;
-
-    public List<string> stop3DialogueLines;
+    public List<string> gasStationDialogueLinesLH;
+    
+    public List<string> gasStationDialogueLinesRH;
+    [HideInInspector]
+    public List<string> stop1DialogueLinesLH;
+    [HideInInspector]
+    public List<string> stop1DialogueLinesRH;
+    [HideInInspector]
+    public List<string> stop2DialogueLinesLH;
+    [HideInInspector]
+    public List<string> stop2DialogueLinesRH;
+    [HideInInspector]
+    public List<string> stop3DialogueLinesLH;
+    [HideInInspector]
+    public List<string> stop3DialogueLinesRH;
 
     //public List<string> blankTest;
 
@@ -26,68 +42,60 @@ public class examplePhoneMsgScript : MonoBehaviour
 
     void Start()
     {
+        scrollAnim = GetComponent<Animation>();
 
-        stop1DialogueLines = new List<string>(new string[] 
+
+
+        gasStationDialogueLinesLH = new List<string>(new string[]
         {
-            "Hey, just stopping for a rest. long day",
-            "Here's some more filler text. This should pop up " + messageDelayTime.ToString() + " seconds after the first bit.",
+            ""
         });
-
-        stop2DialogueLines = new List<string>(new string[]
+        gasStationDialogueLinesRH = new List<string>(new string[]
         {
-            "Here is where Stop 2 dialogue starts. Girlfriend has dinner, etc. etc." + messageDelayTime.ToString() +
-            "Pretty far... just really tired as well"
+            ""
         });
-
-        stop3DialogueLines = new List<string>(new string[]
+        //
+        stop1DialogueLinesLH = new List<string>(new string[] 
         {
-            "Hey. Get close I think. See soon." + messageDelayTime.ToString() + "Yep..." + messageDelayTime.ToString() + 
-            "I'm not that for now" + messageDelayTime.ToString() + "Before we met? What was that like?" + messageDelayTime.ToString() + "Oh...",
-            "Zack, is this what you expected?"
+            ""
         });
-
-        /*
-        blankTest = new List<string>(new string[]
+        stop1DialogueLinesRH = new List<string>(new string[]
         {
-        "",
-        ""
+            ""
         });
-        */
-
-
-
-        // Method 1 for adding strings to currentDialogueLines. This will take each individual 
-        // string (i.e. each line of dialogue) in stop1DialogueLines and add it do currentDialogueLines.
-        // This is useful if you want to ADD lines.
-        /*
-        foreach (string line in stop1DialogueLines)
+        //
+        stop2DialogueLinesLH = new List<string>(new string[]
         {
-            currentDialogueLines.Add(line);
-        }
-        */
-
-
-
-
+            ""
+        });
+        stop2DialogueLinesRH = new List<string>(new string[]
+        {
+            ""
+        });
+        //
+        stop3DialogueLinesLH = new List<string>(new string[]
+        {
+            ""
+        });
+        stop3DialogueLinesRH = new List<string>(new string[]
+        {
+            ""
+        });
 
         // Method 2 for adding strings to currentDialogueLines. This will take ALL strings in
         // stop1DialogueLines and add them to currentDialogueLines. This will OVERWRITE any
         // strings in currentDialogueLines.
-        currentDialogueLines = stop1DialogueLines;
-
-
-
-
-
-
-        Debug.Log("Dialogue lines count: " + currentDialogueLines.Count.ToString());
+        currentDialogueLinesLH = gasStationDialogueLinesLH;
+        currentDialogueLinesRH = gasStationDialogueLinesRH;
 
         StartCoroutine("DialogueCreaterCoroutine");
     }
 
     void Update()
     {
-        //MsgClearCheck();
+        scrollRect.verticalNormalizedPosition = scrollAmount;
+
+        ScrollAnimate();
     }
 
     IEnumerator DialogueCreaterCoroutine()
@@ -96,9 +104,9 @@ public class examplePhoneMsgScript : MonoBehaviour
         while (playingDialogue)
         {
             yield return new WaitForSeconds(messageDelayTime);
-            if (currentDialogueLines.Count > lineNum)
+            if (currentDialogueLinesLH.Count > lineNum)
             {
-                exampleLHText.text += "\n" + "\n" + currentDialogueLines[lineNum];
+                LHText.text += "\n" + "\n" + currentDialogueLinesLH[lineNum];
                 lineNum++;
             }
             else
@@ -112,15 +120,14 @@ public class examplePhoneMsgScript : MonoBehaviour
     }
 
     // We might have use this if we want to carry dialogue over from previous rest stops.
-    /*
     IEnumerator DialogueScrollerCoroutine()
     {
-        int linesToScroll = currentDialogueLines.Count;
+        int linesToScroll = currentDialogueLinesLH.Count;
 
         while (linesToScroll > 0)
         {
             yield return new WaitForSeconds(1);
-            exampleLHText.rectTransform.anchoredPosition = new Vector2(exampleLHText.rectTransform.anchoredPosition.x, exampleLHText.rectTransform.anchoredPosition.y + 0.01f);
+            LHText.rectTransform.anchoredPosition = new Vector2(LHText.rectTransform.anchoredPosition.x, LHText.rectTransform.anchoredPosition.y + 0.01f);
 
             linesToScroll -= 1;
 
@@ -128,17 +135,16 @@ public class examplePhoneMsgScript : MonoBehaviour
             yield return linesToScroll;
         }
     }
-    */
     
     // Use this function after interacting with a rest stop. It will cycle dialogue and unpause the DialogueCreatorCoroutine.
     public void MsgClearCheck()
     {
-        currentDialogueLines.Clear();
+        currentDialogueLinesLH.Clear();
 
         if (restStopNum == 2)
         {
-            exampleLHText.text = null;
-            currentDialogueLines = stop2DialogueLines;
+            LHText.text = null;
+            currentDialogueLinesLH = stop2DialogueLinesLH;
             lineNum = 0;
             playingDialogue = true;
 
@@ -148,22 +154,16 @@ public class examplePhoneMsgScript : MonoBehaviour
         {
             // same thing but for Stop 3
         }
-
-
-
-
-
-        /*
-        GameObject playerCar = GameObject.Find("PlayerCar");
-        TextMessageClear messageClear = playerCar.GetComponent<TextMessageClear>();
-        
-        if(messageClear.clearMessage == true)
-        {
-            currentDialogueLines = blankTest;
-            Debug.Log("MESSSAGECLEAR");
-        }
-        //examplePhoneMsgScript phoneScript = playerCar.GetComponent<examplePhoneMsgScript>();
-        */
     }
-    
+
+    void ScrollAnimate()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (scrollAnim != null)
+            {
+                scrollAnim.Play();
+            }
+        }
+    }
 }

@@ -22,7 +22,7 @@ public class phoneanimation : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (null != anim)
+            if (anim != null)
             {
                 // play phone animation 
                 anim.Play("phone_reststop1");
