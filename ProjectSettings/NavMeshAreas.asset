@@ -11,13 +11,13 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: 
+  - name: A1 Lane
     cost: 1
-  - name: 
+  - name: A2 Lane
     cost: 1
-  - name: 
+  - name: B1 Lane
     cost: 1
-  - name: 
+  - name: B2 Lane
     cost: 1
   - name: 
     cost: 1
@@ -89,10 +89,10 @@ NavMeshProjectSettings:
       m_Flags: 0
   - serializedVersion: 2
     agentTypeID: -1372625422
-    agentRadius: 1
-    agentHeight: 1
+    agentRadius: 0.5
+    agentHeight: 2
     agentSlope: 45
-    agentClimb: 0.4
+    agentClimb: 0.75
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     minRegionArea: 2
