@@ -8,6 +8,7 @@ TagManager:
   - Waypoint1
   - Waypoint2
   - Waypoint3
+  - TutorialTrigger
   layers:
   - Default
   - TransparentFX
