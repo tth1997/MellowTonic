@@ -36,3 +36,4 @@ sysinfo.txt
 *.unitypackage
 Assets/Animations/phone_pullDown.anim.meta
 Assets/Animations/phone_pullUp.anim.meta
+Assets/Prefabs/Smartphone.prefab.meta
