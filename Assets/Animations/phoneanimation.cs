@@ -5,6 +5,7 @@ using UnityEngine;
 public class phoneanimation : MonoBehaviour
 {
     private Animation anim;
+    public bool holdUp;
     
     // Start is called before the first frame update
     void Start()
@@ -22,10 +23,19 @@ public class phoneanimation : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (anim != null)
+
+            if (!holdUp)
             {
                 // play phone animation 
-                anim.Play("phone_reststop1");
+                anim.Play("phone_pullUp");
+                holdUp = true;
+            }
+
+            else
+            {
+                // play pull down animation
+                anim.Play("phone_pullDown");
+                holdUp = false;
             }
         }
     }

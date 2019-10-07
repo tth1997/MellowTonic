@@ -49,7 +49,7 @@ public class RestStopCheck : MonoBehaviour
         if (other.tag == "RestStopTrigger")
         {
             inRest = true;
-            phoneRestAnim.Play("phone_reststop1");
+            phoneRestAnim.Play("phone_pullUp");
             Debug.Log("RestStop");
 
             
@@ -61,6 +61,7 @@ public class RestStopCheck : MonoBehaviour
         if (other.tag == "RestStopTrigger")
         {
             inRest = false;
+            phoneRestAnim.Play("phone_pullDown");
         }
     }
 }

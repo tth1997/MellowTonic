@@ -1715,8 +1715,10 @@ Animation:
   m_Animation: {fileID: 7400000, guid: 59b64937df69e2f499465b0528404f60, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 59b64937df69e2f499465b0528404f60, type: 2}
+  - {fileID: 7400000, guid: 73c823b6454342c479a842746f366380, type: 2}
+  - {fileID: 7400000, guid: 972662795d6c64946af2d4f7eba19cbc, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!114 &632300727579221864
@@ -1811,17 +1813,41 @@ PrefabInstance:
       propertyPath: m_Name
       value: Smartphone
       objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.0011
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.034
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2983
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4348052
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4947137
+      objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: c4031917428652f4c985c8c59a27464c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.4212
+      value: 0.421
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: c4031917428652f4c985c8c59a27464c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.0419
+      value: -0.18
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: c4031917428652f4c985c8c59a27464c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0842
+      value: 0.173
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: c4031917428652f4c985c8c59a27464c, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1867,30 +1893,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.5
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.0011
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.034
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.0001
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.2983
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.4348052
-      objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: c4031917428652f4c985c8c59a27464c, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.4947137
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4031917428652f4c985c8c59a27464c, type: 3}
 --- !u!1 &8255697951072256677 stripped
@@ -1912,10 +1914,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6696457680504618259}
     m_Modifications:
-    - target: {fileID: 1223002772083156, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
-      propertyPath: m_Name
-      value: CivilianVehicle05
-      objectReference: {fileID: 0}
     - target: {fileID: 4407244999693362, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1963,6 +1961,10 @@ PrefabInstance:
     - target: {fileID: 4407244999693362, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1223002772083156, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
+      propertyPath: m_Name
+      value: CivilianVehicle05
       objectReference: {fileID: 0}
     - target: {fileID: 4754648728455698, guid: f17dfaf4c25d15e41a1cfe4f7597bcd6, type: 3}
       propertyPath: m_LocalRotation.x
