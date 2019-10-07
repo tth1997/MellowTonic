@@ -45,5 +45,6 @@ public class GameManagerScript : MonoBehaviour
     public void Crash()
     {
         Debug.Log("Crashed!");
+        SceneManager.LoadScene(3);
     }
 }

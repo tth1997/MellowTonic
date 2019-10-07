@@ -40,7 +40,7 @@ public class TutorialText : MonoBehaviour
     {
         if (_tutorialCount == 0)
         {
-            tutorialText.text = "Use the 'W' and 'D' keys to increase or decrease the cars speed.";
+            tutorialText.text = "Use the 'W' and 'S' keys to increase or decrease the cars speed.";
         }
 
         if(_tutorialCount == 1)
