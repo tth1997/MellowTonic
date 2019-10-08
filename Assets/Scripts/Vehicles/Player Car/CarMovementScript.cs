@@ -22,6 +22,7 @@ public class CarMovementScript : MonoBehaviour
     public float pid_minMotorForce;
 
     // Steering PID
+    CarSteeringPID SteerPID = new CarSteeringPID();
     public float pid_Kp2 = 1f;
     public float pid_Ki2 = 1f;
     public float pid_Kd2 = 1f;
@@ -56,8 +57,7 @@ public class CarMovementScript : MonoBehaviour
     [HideInInspector]
     public bool PIDActive;
 
-    // Steering 
-    CarSteeringPID SteerPID = new CarSteeringPID();
+    // Steering
     [HideInInspector]
     public GameObject mouseRigObject;
 
@@ -358,8 +358,19 @@ public class CarMovementScript : MonoBehaviour
                             steeringAngle - (maxSteerRate * Time.fixedDeltaTime),
                             steeringAngle + (maxSteerRate * Time.fixedDeltaTime));
 
-            frontLeftW.steerAngle = steeringAngle;
-            frontRightW.steerAngle = steeringAngle;
+
+
+
+            if (Vector3.Angle(transform.forward, carRB.velocity) > 90)
+            {
+                frontLeftW.steerAngle = -steeringAngle;
+                frontRightW.steerAngle = -steeringAngle;
+            }
+            else
+            {
+                frontLeftW.steerAngle = steeringAngle;
+                frontRightW.steerAngle = steeringAngle;
+            }
         }
     }
 
