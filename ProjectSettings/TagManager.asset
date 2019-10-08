@@ -3,12 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - RestStopTrigger
-  - Waypoint1
-  - Waypoint2
-  - Waypoint3
-  - TutorialTrigger
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -18,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
+  - 
   - 
   - 
   - 
