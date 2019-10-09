@@ -79,14 +79,14 @@ public class GameManagerScript : MonoBehaviour
                 {
                     if (newMoveSpeed > playerCarTransform.GetComponent<CarMovementScript>().carVel)
                     {
-                        newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x + 300f, -10000f, 390f), 2f, -155f), Quaternion.Euler(Vector3.zero));
+                        newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x + 300f, -10000f, 390f), 2f, -200f), Quaternion.Euler(Vector3.zero));
                         newAIScript = newAICar.GetComponent<AICarMovementScript>();
                         newAIScript.moveSpeed = newMoveSpeed;
                         newAIScript.waypointNum = newWaypoint;
                     }
                     else
                     {
-                        newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x - 300f, -10000f, 390f), 2f, -155f), Quaternion.Euler(Vector3.zero));
+                        newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x - 300f, -10000f, 390f), 2f, -200f), Quaternion.Euler(Vector3.zero));
                         newAIScript = newAICar.GetComponent<AICarMovementScript>();
                         newAIScript.moveSpeed = newMoveSpeed;
                         newAIScript.waypointNum = newWaypoint;
@@ -94,7 +94,7 @@ public class GameManagerScript : MonoBehaviour
                 }
                 else if (newWaypoint == 2)
                 {
-                    newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x - 300f, -10000f, 390f), 2f, -155f), Quaternion.Euler(Vector3.zero));
+                    newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x - 300f, -10000f, 390f), 2f, -200f), Quaternion.Euler(Vector3.zero));
                     newAIScript = newAICar.GetComponent<AICarMovementScript>();
                     newAIScript.moveSpeed = newMoveSpeed;
                     newAIScript.waypointNum = newWaypoint;

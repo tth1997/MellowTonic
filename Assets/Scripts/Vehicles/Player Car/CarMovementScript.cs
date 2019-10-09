@@ -112,7 +112,7 @@ public class CarMovementScript : MonoBehaviour
     // End-State & Game Management
     [HideInInspector]
     public GameManagerScript gameManagerScript;
-    float crashAccel = 10f;
+    float crashAccel = 5f;
     [SerializeField]
     bool hasCrashed = false;
 
@@ -129,6 +129,8 @@ public class CarMovementScript : MonoBehaviour
     void InitializeVariables()
     {
         carRB = GetComponent<Rigidbody>();
+        carRB.centerOfMass = new Vector3(0, -0.5f, 0);
+
         mouseRigObject = GameObject.Find("MouseRig");
         if (mouseRigObject == null)
             Debug.LogError("mouseRigObject not specified. Make sure that the MouseRig prefab is in the scene, and is named as such.");
@@ -384,12 +386,12 @@ public class CarMovementScript : MonoBehaviour
 
     void CheckRoll()
     {
-        if (transform.eulerAngles.z < 180 && transform.eulerAngles.z > 45 && !hasCrashed)
+        if (transform.eulerAngles.z < 180 && transform.eulerAngles.z > 60 && !hasCrashed)
         {
             gameManagerScript.Crash();
             hasCrashed = true;
         }
-        else if (transform.eulerAngles.z > 180 & transform.eulerAngles.z < 315 && !hasCrashed)
+        else if (transform.eulerAngles.z > 180 & transform.eulerAngles.z < 300 && !hasCrashed)
         {
             gameManagerScript.Crash();
             hasCrashed = true;

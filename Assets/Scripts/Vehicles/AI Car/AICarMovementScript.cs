@@ -29,8 +29,8 @@ public class AICarMovementScript : MonoBehaviour
     float pid_maxSteerAngle = 30f;
 
     // Acceleration
-    [HideInInspector]
     public float motorForce;
+    public float currentBrakeForce;
     float brakeForce = 50000f;
     float brakeDistance = 10f;
     public float AIVel
@@ -72,6 +72,9 @@ public class AICarMovementScript : MonoBehaviour
         playerCarTransform = GameObject.FindGameObjectWithTag("Player").transform;
         AIcarRB = GetComponent<Rigidbody>();
 
+        Transform closestLaneTransform = FindClosestLane(GameObject.FindGameObjectsWithTag("Lane"));
+        transform.position = new Vector3(transform.position.x, transform.position.y, closestLaneTransform.position.z); 
+
         carAgentTransform = Instantiate(carAgentObject, transform.position, Quaternion.identity).transform;
         carAgent = carAgentTransform.GetComponent<NavMeshAgent>();
 
@@ -99,11 +102,38 @@ public class AICarMovementScript : MonoBehaviour
         if (laneNum == 4)
             carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B2");
 
-        carAgent.speed = moveSpeed;
-        carAgent.enabled = true;
 
+        carAgent.speed = 50f;
+        carAgent.acceleration = 50f;
+        carAgent.enabled = true;
+        
+        NavMeshHit navHit;
+        if (carAgent.FindClosestEdge(out navHit))
+        {
+            transform.position = navHit.position;
+        }
+        
         InitializeAccelPID();
         InitializeSteerPID();
+    }
+
+    private Transform FindClosestLane(GameObject[] lanes)
+    {
+        Transform closestLane = null;
+        float closestDistSqr = Mathf.Infinity;
+
+        for (int i = 0; i < lanes.Length; i += 12)
+        {
+            float distSqr = (lanes[i].transform.position - transform.position).sqrMagnitude;
+
+            if (distSqr < closestDistSqr)
+            {
+                closestDistSqr = distSqr;
+                closestLane = lanes[i].transform;
+            }
+        }
+
+        return closestLane;
     }
 
     private void InitializeAccelPID()
@@ -134,20 +164,13 @@ public class AICarMovementScript : MonoBehaviour
 
     void DestroyCheck()
     {
-        if (Vector3.Distance(transform.position, playerCarTransform.position) > 500f)
+        if (transform.position.sqrMagnitude - playerCarTransform.position.sqrMagnitude > Mathf.Pow(2, 400))
         {
             Destroy(carAgentTransform.gameObject);
             Destroy(gameObject);
         }
 
-        var AICars = FindObjectsOfType<AICarMovementScript>();
-        if (AICars.Length > AILimit)
-        {
-            Destroy(carAgentTransform.gameObject);
-            Destroy(gameObject);
-        }
-
-        if (Vector3.Distance(transform.position, waypointCurrent.position) < 5)
+        if (transform.position.sqrMagnitude - waypointCurrent.position.sqrMagnitude < Mathf.Pow(10, 2))
         {
             Destroy(carAgentTransform.gameObject);
             Destroy(gameObject);
@@ -167,11 +190,13 @@ public class AICarMovementScript : MonoBehaviour
             {
                 frontLeftW.brakeTorque = brakeForce;
                 frontRightW.brakeTorque = brakeForce;
+                currentBrakeForce = brakeForce;
             }
             else
             {
                 frontLeftW.brakeTorque = 0;
                 frontRightW.brakeTorque = 0;
+                currentBrakeForce = 0;
             }
         }
         else
@@ -179,7 +204,30 @@ public class AICarMovementScript : MonoBehaviour
             motorForce = AIAccelPID.Cycle(AIVel, moveSpeed, Time.fixedDeltaTime);
             frontLeftW.motorTorque = motorForce;
             frontRightW.motorTorque = motorForce;
+
+            frontLeftW.brakeTorque = 0;
+            frontRightW.brakeTorque = 0;
+            currentBrakeForce = 0;
         }
+    }
+
+    public void NavAgentUpdate()
+    {
+        if (waypointCurrent != null && carAgent.isOnNavMesh)
+        {
+            carAgent.SetDestination(waypointCurrent.position);
+        }
+        else
+        {
+            if (waypointCurrent == null)
+                Debug.LogError("Waypoint not found!");
+            if (!carAgent.isOnNavMesh)
+                Debug.LogError("Agent is not close enough to NavMesh!");
+        }
+
+        carAgentTransform.position = new Vector3(Mathf.Clamp(carAgentTransform.position.x, transform.position.x - agentMaxDistance, transform.position.x + agentMaxDistance),
+                                                 Mathf.Clamp(carAgentTransform.position.y, transform.position.y - agentMaxDistance, transform.position.y + agentMaxDistance),
+                                                 Mathf.Clamp(carAgentTransform.position.z, transform.position.z - agentMaxDistance, transform.position.z + agentMaxDistance));
     }
 
     private void FixedUpdate()
@@ -192,41 +240,21 @@ public class AICarMovementScript : MonoBehaviour
         Vector3 relPos = carAgentTransform.position - transform.position;
         Quaternion targetAngle = Quaternion.LookRotation(relPos, Vector3.up);
 
-        RaycastHit rayHit;
-        if (Physics.Raycast(transform.position, transform.forward, out rayHit, brakeDistance))
-        {
-            steeringAngle = AISteerPID.Cycle(transform.rotation.eulerAngles.y,
-                             targetAngle.eulerAngles.y,
-                             Time.fixedDeltaTime);
+        steeringAngle = AISteerPID.Cycle(transform.rotation.eulerAngles.y,
+                                         targetAngle.eulerAngles.y,
+                                         Time.fixedDeltaTime);
 
+
+        if (Vector3.Angle(transform.forward, AIcarRB.velocity) > 90)
+        {
             frontLeftW.steerAngle = -steeringAngle;
             frontRightW.steerAngle = -steeringAngle;
         }
         else
         {
-            steeringAngle = AISteerPID.Cycle(transform.rotation.eulerAngles.y,
-                                         targetAngle.eulerAngles.y,
-                                         Time.fixedDeltaTime);
-
             frontLeftW.steerAngle = steeringAngle;
             frontRightW.steerAngle = steeringAngle;
         }
-    }
-
-    public void NavAgentUpdate()
-    {
-        if (waypointCurrent != null)
-        {
-            carAgent.SetDestination(waypointCurrent.position);
-        }
-        else
-        {
-            Debug.LogError("Waypoint not found!");
-        }
-
-        carAgentTransform.position = new Vector3(Mathf.Clamp(carAgentTransform.position.x, transform.position.x - agentMaxDistance, transform.position.x + agentMaxDistance),
-                                                 Mathf.Clamp(carAgentTransform.position.y, transform.position.y - agentMaxDistance, transform.position.y + agentMaxDistance),
-                                                 Mathf.Clamp(carAgentTransform.position.z, transform.position.z - agentMaxDistance, transform.position.z + agentMaxDistance));
     }
 
     private void OnDrawGizmos()

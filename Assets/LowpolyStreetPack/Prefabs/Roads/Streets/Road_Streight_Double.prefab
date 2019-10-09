@@ -389,7 +389,7 @@ GameObject:
   - component: {fileID: 898435490535238970}
   m_Layer: 0
   m_Name: A2 NavLane
-  m_TagString: Untagged
+  m_TagString: Lane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 4
   m_StaticEditorFlags: 4294967294
@@ -480,7 +480,7 @@ GameObject:
   - component: {fileID: 6726614419660932992}
   m_Layer: 0
   m_Name: B2 NavLane
-  m_TagString: Untagged
+  m_TagString: Lane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 6
   m_StaticEditorFlags: 4294967294
@@ -571,7 +571,7 @@ GameObject:
   - component: {fileID: 2076554094617542342}
   m_Layer: 0
   m_Name: B1 NavLane
-  m_TagString: Untagged
+  m_TagString: Lane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 5
   m_StaticEditorFlags: 4294967294
@@ -844,7 +844,7 @@ GameObject:
   - component: {fileID: 4952360072946790345}
   m_Layer: 0
   m_Name: A1 NavLane
-  m_TagString: Untagged
+  m_TagString: Lane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
   m_StaticEditorFlags: 4294967294

@@ -13,9 +13,9 @@ public class GPS : MonoBehaviour
         audio = GetComponent<AudioSource>();
     }
 
-    void OnTriggerEnter()
+    private void OnTriggerEnter(Collider col)
     {
-        if (!alreadyPlayed)
+        if (!alreadyPlayed && col.GetComponentInParent<Rigidbody>().tag == "Player")
         {
             audio.PlayOneShot(SoundToPlay, Volume);
             alreadyPlayed = true;
