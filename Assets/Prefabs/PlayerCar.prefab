@@ -42,7 +42,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 0.91220385, g: 0.9150943, b: 0.82444817, a: 1}
-  m_Intensity: 2
+  m_Intensity: 3
   m_Range: 80
   m_SpotAngle: 60
   m_CookieSize: 10
@@ -111,7 +111,7 @@ Light:
   serializedVersion: 8
   m_Type: 0
   m_Color: {r: 0.91220385, g: 0.9150943, b: 0.82444817, a: 1}
-  m_Intensity: 2
+  m_Intensity: 3
   m_Range: 80
   m_SpotAngle: 60
   m_CookieSize: 10
@@ -514,7 +514,7 @@ MonoBehaviour:
   rearRightW: {fileID: 2322318429428663480}
   pid_Kp1: 1000
   pid_Ki1: 0.15
-  pid_Kd1: 10
+  pid_Kd1: 5
   pid_maxMotorForce: 1000
   pid_minMotorForce: -10
   pid_Kp2: 1
@@ -524,7 +524,8 @@ MonoBehaviour:
   targetVel: 0
   PIDActive: 0
   mouseRigObject: {fileID: 0}
-  currentSwayMagnitude: 0
+  currentAccelSwayMagnitude: 0
+  currentSteerSwayMagnitude: 0
   inputDelayTime: 0
   currentFocusDistance: 0.5
   blackoutImg: {fileID: 0}
@@ -569,12 +570,12 @@ NavMeshObstacle:
   m_GameObject: {fileID: 2322318430025994810}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 1, y: 0.5, z: 3.5}
+  m_Shape: 0
+  m_Extents: {x: 5, y: 1.5, z: 5}
   m_MoveThreshold: 0.5
-  m_Carve: 1
+  m_Carve: 0
   m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: -0.5, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 1
 --- !u!114 &50105763
 MonoBehaviour:

@@ -33,7 +33,8 @@ public class RestStopCheck : MonoBehaviour
             
             
             carMovementScript.inputDelayTime = 0;
-            carMovementScript.currentSwayMagnitude = 0;
+            carMovementScript.currentSteerSwayMagnitude = 0;
+            carMovementScript.currentAccelSwayMagnitude = 0;
             carMovementScript.currentFocusDistance = .5f;
             carMovementScript.blackoutTimer = Time.time + 180;
             carMovementScript.blackoutBaseDuration = .1f;

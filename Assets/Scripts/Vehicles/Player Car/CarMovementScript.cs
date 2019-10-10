@@ -71,9 +71,14 @@ public class CarMovementScript : MonoBehaviour
 
     // Fatigue Effects for Steering
     [HideInInspector]
-    public float currentSwayMagnitude;                                                          // RESET THIS TO 0 AT REST STOP
-    float swayMagnitudeRate = 0.013f;
-    float swayMagnitudeLimit = 4f;
+    public float currentAccelSwayMagnitude;
+    float accelSwayMagnitudeRate = 2.7f;
+    float accelSwayMagnitudeLimit = 500f;
+
+    [HideInInspector]
+    public float currentSteerSwayMagnitude;                                                          // RESET THIS TO 0 AT REST STOP
+    float steerSwayMagnitudeRate = 0.013f;
+    float steerSwayMagnitudeLimit = 4f;
 
     [HideInInspector]
     public float inputDelayTime;                                                                // RESET THIS TO 0 AT REST STOP
@@ -112,7 +117,7 @@ public class CarMovementScript : MonoBehaviour
     // End-State & Game Management
     [HideInInspector]
     public GameManagerScript gameManagerScript;
-    float crashAccel = 5f;
+    float crashAccel = 7.5f;
     [SerializeField]
     bool hasCrashed = false;
 
@@ -213,15 +218,20 @@ public class CarMovementScript : MonoBehaviour
         {
             frontLeftW.brakeTorque = brakeForce;
             frontRightW.brakeTorque = brakeForce;
-            rearLeftW.motorTorque = pid_minMotorForce;
-            rearRightW.motorTorque = pid_minMotorForce;
             targetVel = carVel;
+        }
+        else if (verticalInput == 0 && carVel < 0.25f)
+        {
+            frontLeftW.brakeTorque = brakeForce;
+            frontRightW.brakeTorque = brakeForce;
         }
         else
         {
             frontLeftW.brakeTorque = 0f;
             frontRightW.brakeTorque = 0f;
         }
+
+
     }
 
     void InputCheck()
@@ -244,6 +254,7 @@ public class CarMovementScript : MonoBehaviour
         // Fatigue Effects
         InputDelay();
         SteeringSway();
+        AcceleratorSway();
         CamBlur();
         CamBlackout();
 
@@ -274,11 +285,19 @@ public class CarMovementScript : MonoBehaviour
     }
     void SteeringSway()
     {
-        SteerPID.steeringSwayMagnitude = currentSwayMagnitude;
+        SteerPID.steeringSwayMagnitude = currentSteerSwayMagnitude;
 
-        currentSwayMagnitude = Mathf.Clamp(currentSwayMagnitude + swayMagnitudeRate * Time.fixedDeltaTime, 
+        currentSteerSwayMagnitude = Mathf.Clamp(currentSteerSwayMagnitude + steerSwayMagnitudeRate * Time.fixedDeltaTime, 
                                            0, 
-                                           swayMagnitudeLimit);
+                                           steerSwayMagnitudeLimit);
+    }
+    void AcceleratorSway()
+    {
+        AccelPID.acceleratorSwayMagnitude = currentAccelSwayMagnitude;
+
+        currentAccelSwayMagnitude = Mathf.Clamp(currentAccelSwayMagnitude + accelSwayMagnitudeRate * Time.fixedDeltaTime,
+                                           0,
+                                           accelSwayMagnitudeLimit);
     }
     void CamBlur()
     {
@@ -421,6 +440,10 @@ public class CarAccelerationPID
     public float outputMax;
     public float outputMin;
 
+    float acceleratorSway;
+    float acceleratorSwayPeriod = 10f;
+    public float acceleratorSwayMagnitude;
+
     public float preError;
     public float integral;
     public float derivative;
@@ -431,10 +454,15 @@ public class CarAccelerationPID
         var error = targetSpeed - currentSpeed;
         integral = Mathf.Clamp(integral + error + Dt, outputMin, outputMax);
         derivative = (error - preError) / Dt;
+
+        acceleratorSway += (Mathf.PI / acceleratorSwayPeriod) * Time.fixedDeltaTime;
+        if (acceleratorSway >= 2 * Mathf.PI)
+            acceleratorSway = 0f;
+
         output = Mathf.Clamp(error * Kp + integral * Ki + derivative * Kd, outputMin, outputMax);
 
         preError = error;
-        return output;
+        return output + (Mathf.Sin(acceleratorSway) * acceleratorSwayMagnitude);
     }
 }
 
@@ -463,9 +491,7 @@ public class CarSteeringPID
     public float Cycle(float currentDirection, float targetDirection, float Dt)
     {
         var error = Mathf.DeltaAngle(currentDirection, targetDirection);
-
         integral = Mathf.Clamp(integral + error + Dt, outputMin, outputMax);
-
         derivative = (error - preError) / Dt;
         
         steeringSway += (Mathf.PI / steeringSwayPeriod) * Time.fixedDeltaTime;

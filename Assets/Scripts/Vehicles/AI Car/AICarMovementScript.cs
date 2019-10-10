@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class AICarMovementScript : MonoBehaviour
 {
-    int AILimit = 10;
-
-
     // Wheel Colliders
     private Rigidbody AIcarRB;
     public WheelCollider frontLeftW, frontRightW;
@@ -49,6 +46,8 @@ public class AICarMovementScript : MonoBehaviour
     float pid_steeringDamp = 1f;
     float steeringAngle;
 
+    float playerDetectionDistance = 30f;
+
     // NavMesh
     public GameObject carAgentObject;
     NavMeshAgent carAgent;
@@ -65,7 +64,8 @@ public class AICarMovementScript : MonoBehaviour
     public int laneNum;
     [HideInInspector]
     public float moveSpeed;
-    float agentMaxDistance = 10f;
+    float agentMaxDistance = 15f;
+    float maxPlayerDistance = 400f;
 
     void Start()
     {
@@ -91,16 +91,17 @@ public class AICarMovementScript : MonoBehaviour
         }
 
         if (laneNum == 1)
-            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane A1");
+            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane A1");
 
         if (laneNum == 2)
-            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane A2");
+            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane A2");
 
         if (laneNum == 3)
-            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B1");
+            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane B1");
 
         if (laneNum == 4)
-            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B2");
+            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane B2");
+
 
 
         carAgent.speed = 50f;
@@ -111,10 +112,14 @@ public class AICarMovementScript : MonoBehaviour
         if (carAgent.FindClosestEdge(out navHit))
         {
             transform.position = navHit.position;
+            carAgentTransform.position = transform.forward * agentMaxDistance;
         }
         
         InitializeAccelPID();
         InitializeSteerPID();
+
+
+        Debug.Log("New AI car at: " + transform.position);
     }
 
     private Transform FindClosestLane(GameObject[] lanes)
@@ -158,29 +163,68 @@ public class AICarMovementScript : MonoBehaviour
     {
         DestroyCheck();
 
+        //PlayerAvoidance();
         Acceleration();
         NavAgentUpdate();
     }
-
+    
     void DestroyCheck()
     {
-        if (transform.position.sqrMagnitude - playerCarTransform.position.sqrMagnitude > Mathf.Pow(2, 400))
+        
+        if ((transform.position - playerCarTransform.position).sqrMagnitude > Mathf.Pow(maxPlayerDistance, 2))
         {
             Destroy(carAgentTransform.gameObject);
             Destroy(gameObject);
+
+            
+            Debug.Log("AI car despawned.");
         }
 
-        if (transform.position.sqrMagnitude - waypointCurrent.position.sqrMagnitude < Mathf.Pow(10, 2))
+        if ((transform.position - waypointCurrent.position).sqrMagnitude < Mathf.Pow(10, 2))
         {
             Destroy(carAgentTransform.gameObject);
             Destroy(gameObject);
+
+            Debug.Log("AI car despawned.");
         }
     }
 
+    void PlayerAvoidance()
+    {
+        if ((carAgentTransform.position - playerCarTransform.position).sqrMagnitude < Mathf.Pow(playerDetectionDistance,2))
+        {
+            /*
+            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane A1");
+            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane A2");
+            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane B1");
+            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane B2");
+            */
+            carAgent.areaMask = NavMesh.AllAreas;
+
+            Debug.Log("NavAgent rayhitting player!");
+        }
+        else
+        {
+            if (laneNum == 1)
+                carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane A1");
+
+            if (laneNum == 2)
+                carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane A2");
+
+            if (laneNum == 3)
+                carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B1");
+
+            if (laneNum == 4)
+                carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B2");
+        }
+
+
+    }
+    
     void Acceleration()
     {
         RaycastHit rayHit;
-        if (Physics.Raycast(transform.position, transform.forward, out rayHit, brakeDistance))
+        if (Physics.SphereCast(transform.position, 0.5f,transform.forward, out rayHit, brakeDistance))
         {
             motorForce = -AIAccelPID.Cycle(AIVel, moveSpeed, Time.fixedDeltaTime);
             frontLeftW.motorTorque = motorForce;

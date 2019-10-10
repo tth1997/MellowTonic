@@ -100,7 +100,7 @@ public class GameManagerScript : MonoBehaviour
                     newAIScript.waypointNum = newWaypoint;
                 }
             }
-
+            Debug.Log("Num of AI cars: " + AICars.Length);
             Debug.Log("New AI car Instantiated.");
             yield return new WaitForSeconds(15f);
 
