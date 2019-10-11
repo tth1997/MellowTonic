@@ -125,7 +125,7 @@ Transform:
   m_GameObject: {fileID: 1285709291990947302}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -6.5625, y: 0.000000007450581, z: -0.06250004}
-  m_LocalScale: {x: 2, y: 1, z: 30.000017}
+  m_LocalScale: {x: 4, y: 1, z: 30.000017}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 2
@@ -216,7 +216,7 @@ Transform:
   m_GameObject: {fileID: 2182980459105487997}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.8125, y: 0.000000007450581, z: -0.06250001}
-  m_LocalScale: {x: 2, y: 1, z: 30.000017}
+  m_LocalScale: {x: 4, y: 1, z: 30.000017}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 1
@@ -307,7 +307,7 @@ Transform:
   m_GameObject: {fileID: 2881000486006063914}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -11.3125, y: 0.000000007450581, z: -0.06250004}
-  m_LocalScale: {x: 2, y: 1, z: 30.000017}
+  m_LocalScale: {x: 4, y: 1, z: 30.000017}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 3
@@ -387,7 +387,7 @@ GameObject:
   m_TagString: Lane
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 7
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 4294967287
   m_IsActive: 1
 --- !u!4 &134557457899260973
 Transform:
@@ -489,7 +489,7 @@ Transform:
   m_GameObject: {fileID: 8306849278267499791}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 3.9375, y: 0.000000007450581, z: -0.06250002}
-  m_LocalScale: {x: 2, y: 1, z: 30.000017}
+  m_LocalScale: {x: 4, y: 1, z: 30.000017}
   m_Children: []
   m_Father: {fileID: 400000}
   m_RootOrder: 0

@@ -48,6 +48,12 @@ public class AICarMovementScript : MonoBehaviour
 
     float playerDetectionDistance = 30f;
 
+    // Crashing
+    bool hasCrashed = false;
+    float crashAccel = 7.5f;
+    float oldAIVel;
+    ParticleSystem crashParticles;
+
     // NavMesh
     public GameObject carAgentObject;
     NavMeshAgent carAgent;
@@ -72,6 +78,9 @@ public class AICarMovementScript : MonoBehaviour
         playerCarTransform = GameObject.FindGameObjectWithTag("Player").transform;
         AIcarRB = GetComponent<Rigidbody>();
 
+        crashParticles = GetComponentInChildren<ParticleSystem>();
+        crashParticles.Pause();
+
         Transform closestLaneTransform = FindClosestLane(GameObject.FindGameObjectsWithTag("Lane"));
         transform.position = new Vector3(transform.position.x, transform.position.y, closestLaneTransform.position.z); 
 
@@ -91,16 +100,16 @@ public class AICarMovementScript : MonoBehaviour
         }
 
         if (laneNum == 1)
-            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane A1");
+            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane A1");
 
         if (laneNum == 2)
-            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane A2");
+            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane A2");
 
         if (laneNum == 3)
-            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane B1");
+            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B1");
 
         if (laneNum == 4)
-            carAgent.areaMask += 1 << NavMesh.GetAreaFromName("Lane B2");
+            carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B2");
 
 
 
@@ -164,8 +173,6 @@ public class AICarMovementScript : MonoBehaviour
         DestroyCheck();
 
         //PlayerAvoidance();
-        Acceleration();
-        NavAgentUpdate();
     }
     
     void DestroyCheck()
@@ -189,7 +196,7 @@ public class AICarMovementScript : MonoBehaviour
         }
     }
 
-    void PlayerAvoidance()
+    void PlayerAvoidance() // THIS IS CURRENTLY NOT IN USE.
     {
         if ((carAgentTransform.position - playerCarTransform.position).sqrMagnitude < Mathf.Pow(playerDetectionDistance,2))
         {
@@ -220,11 +227,47 @@ public class AICarMovementScript : MonoBehaviour
 
 
     }
-    
+
+    private void FixedUpdate()
+    {
+        if (!hasCrashed)
+        {
+            CheckRoll();
+            CollisionCheck();
+
+
+            Steer();
+            Acceleration();
+            NavAgentUpdate();
+        }
+    }
+
+    void Steer()
+    {
+        Vector3 relPos = carAgentTransform.position - transform.position;
+        Quaternion targetAngle = Quaternion.LookRotation(relPos, Vector3.up);
+
+        steeringAngle = AISteerPID.Cycle(transform.rotation.eulerAngles.y,
+                                         targetAngle.eulerAngles.y,
+                                         Time.fixedDeltaTime);
+
+
+        if (Vector3.Angle(transform.forward, AIcarRB.velocity) > 90)
+        {
+            frontLeftW.steerAngle = -steeringAngle;
+            frontRightW.steerAngle = -steeringAngle;
+        }
+        else
+        {
+            frontLeftW.steerAngle = steeringAngle;
+            frontRightW.steerAngle = steeringAngle;
+        }
+    }
+
     void Acceleration()
     {
         RaycastHit rayHit;
-        if (Physics.SphereCast(transform.position, 0.5f,transform.forward, out rayHit, brakeDistance))
+        if (Physics.SphereCast(transform.position, 0.5f, transform.forward, out rayHit, brakeDistance))
         {
             motorForce = -AIAccelPID.Cycle(AIVel, moveSpeed, Time.fixedDeltaTime);
             frontLeftW.motorTorque = motorForce;
@@ -262,11 +305,11 @@ public class AICarMovementScript : MonoBehaviour
             carAgent.SetDestination(waypointCurrent.position);
         }
         else
-        {
-            if (waypointCurrent == null)
-                Debug.LogError("Waypoint not found!");
-            if (!carAgent.isOnNavMesh)
-                Debug.LogError("Agent is not close enough to NavMesh!");
+        { 
+        if (waypointCurrent == null)
+            Debug.LogError("Waypoint not found!");
+        if (!carAgent.isOnNavMesh)
+            Debug.LogError("Agent is not close enough to NavMesh!");
         }
 
         carAgentTransform.position = new Vector3(Mathf.Clamp(carAgentTransform.position.x, transform.position.x - agentMaxDistance, transform.position.x + agentMaxDistance),
@@ -274,31 +317,28 @@ public class AICarMovementScript : MonoBehaviour
                                                  Mathf.Clamp(carAgentTransform.position.z, transform.position.z - agentMaxDistance, transform.position.z + agentMaxDistance));
     }
 
-    private void FixedUpdate()
+    void CheckRoll()
     {
-        Steer();
+        if (transform.eulerAngles.z < 180 && transform.eulerAngles.z > 60 && !hasCrashed)
+        {
+            hasCrashed = true;
+            crashParticles.Play();
+        }
+        else if (transform.eulerAngles.z > 180 & transform.eulerAngles.z < 300 && !hasCrashed)
+        {
+            hasCrashed = true;
+            crashParticles.Play();
+        }
     }
-
-    void Steer()
+    void CollisionCheck()
     {
-        Vector3 relPos = carAgentTransform.position - transform.position;
-        Quaternion targetAngle = Quaternion.LookRotation(relPos, Vector3.up);
-
-        steeringAngle = AISteerPID.Cycle(transform.rotation.eulerAngles.y,
-                                         targetAngle.eulerAngles.y,
-                                         Time.fixedDeltaTime);
-
-
-        if (Vector3.Angle(transform.forward, AIcarRB.velocity) > 90)
+        if (Mathf.Abs(oldAIVel - AIVel) > crashAccel && !hasCrashed)
         {
-            frontLeftW.steerAngle = -steeringAngle;
-            frontRightW.steerAngle = -steeringAngle;
+            hasCrashed = true;
+            crashParticles.Play();
         }
-        else
-        {
-            frontLeftW.steerAngle = steeringAngle;
-            frontRightW.steerAngle = steeringAngle;
-        }
+
+        oldAIVel = AIVel;
     }
 
     private void OnDrawGizmos()
@@ -348,10 +388,6 @@ public class AISteeringPID
     public float outputMin;
     public float steeringDamp;
 
-    float steeringSway;
-    float steeringSwayPeriod = 5f;
-    public float steeringSwayMagnitude;
-
     public float preError;
     public float integral;
     public float derivative;
@@ -360,18 +396,12 @@ public class AISteeringPID
     public float Cycle(float currentDirection, float targetDirection, float Dt)
     {
         var error = Mathf.DeltaAngle(currentDirection, targetDirection);
-
         integral = Mathf.Clamp(integral + error + Dt, outputMin, outputMax);
-
         derivative = (error - preError) / Dt;
-
-        steeringSway += (Mathf.PI / steeringSwayPeriod) * Time.fixedDeltaTime;
-        if (steeringSway >= 2 * Mathf.PI)
-            steeringSway = 0f;
 
         output = Mathf.Clamp((error * Kp + integral * Ki + derivative * Kd) * steeringDamp, outputMin, outputMax);
 
         preError = error;
-        return output + (Mathf.Sin(steeringSway) * steeringSwayMagnitude);
+        return output;
     }
 }
