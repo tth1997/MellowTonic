@@ -90,12 +90,10 @@ public class AICarMovementScript : MonoBehaviour
         waypointCurrent = GameObject.FindGameObjectWithTag("Waypoint" + waypointNum.ToString()).transform;
         if (waypointNum == 1)
         {
-            laneNum = Random.Range(1, 3);
             transform.eulerAngles = Vector3.down * 90;
         }
         else
         {
-            laneNum = Random.Range(3, 5);
             transform.eulerAngles = Vector3.up * 90;
         }
 
@@ -232,13 +230,12 @@ public class AICarMovementScript : MonoBehaviour
     {
         if (!hasCrashed)
         {
-            CheckRoll();
-            CollisionCheck();
-
-
             Steer();
             Acceleration();
             NavAgentUpdate();
+
+            CheckRoll();
+            CollisionCheck();
         }
     }
 
@@ -329,6 +326,19 @@ public class AICarMovementScript : MonoBehaviour
             hasCrashed = true;
             crashParticles.Play();
         }
+
+        if (hasCrashed)
+        {
+            frontLeftW.steerAngle = 0;
+            frontRightW.steerAngle = 0;
+
+            frontLeftW.motorTorque = 0;
+            frontRightW.motorTorque = 0;
+
+            frontLeftW.brakeTorque = brakeForce;
+            frontRightW.brakeTorque = brakeForce;
+            currentBrakeForce = brakeForce;
+        }
     }
     void CollisionCheck()
     {
@@ -336,6 +346,19 @@ public class AICarMovementScript : MonoBehaviour
         {
             hasCrashed = true;
             crashParticles.Play();
+        }
+
+        if (hasCrashed)
+        {
+            frontLeftW.steerAngle = 0;
+            frontRightW.steerAngle = 0;
+
+            frontLeftW.motorTorque = 0;
+            frontRightW.motorTorque = 0;
+
+            frontLeftW.brakeTorque = brakeForce;
+            frontRightW.brakeTorque = brakeForce;
+            currentBrakeForce = brakeForce;
         }
 
         oldAIVel = AIVel;

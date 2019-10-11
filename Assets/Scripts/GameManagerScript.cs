@@ -10,8 +10,9 @@ public class GameManagerScript : MonoBehaviour
     public GameObject AICar;
     bool paused = false;
 
-    int spawnLimit = 5;
+    int spawnLimit = 6;
     float spawnTimer;
+    int lastLaneNum;
     bool isSpawning;
 
     void Start()
@@ -83,6 +84,20 @@ public class GameManagerScript : MonoBehaviour
                         newAIScript = newAICar.GetComponent<AICarMovementScript>();
                         newAIScript.moveSpeed = newMoveSpeed;
                         newAIScript.waypointNum = newWaypoint;
+
+                        if (lastLaneNum == 1)
+                        {
+                            newAIScript.laneNum = 2;
+                        }
+                        else if (lastLaneNum == 2)
+                        {
+                            newAIScript.laneNum = 1;
+                        }
+                        else
+                        {
+                            newAIScript.laneNum = Random.Range(1, 3);
+                        }
+                        lastLaneNum = newAIScript.laneNum;
                     }
                     else
                     {
@@ -90,6 +105,20 @@ public class GameManagerScript : MonoBehaviour
                         newAIScript = newAICar.GetComponent<AICarMovementScript>();
                         newAIScript.moveSpeed = newMoveSpeed;
                         newAIScript.waypointNum = newWaypoint;
+
+                        if (lastLaneNum == 1)
+                        {
+                            newAIScript.laneNum = 2;
+                        }
+                        else if (lastLaneNum == 2)
+                        {
+                            newAIScript.laneNum = 1;
+                        }
+                        else
+                        {
+                            newAIScript.laneNum = Random.Range(1, 3);
+                        }
+                        lastLaneNum = newAIScript.laneNum;
                     }
                 }
                 else if (newWaypoint == 2)
@@ -98,6 +127,21 @@ public class GameManagerScript : MonoBehaviour
                     newAIScript = newAICar.GetComponent<AICarMovementScript>();
                     newAIScript.moveSpeed = newMoveSpeed;
                     newAIScript.waypointNum = newWaypoint;
+
+
+                    if (lastLaneNum == 3)
+                    {
+                        newAIScript.laneNum = 4;
+                    }
+                    else if (lastLaneNum == 4)
+                    {
+                        newAIScript.laneNum = 3;
+                    }
+                    else
+                    {
+                        newAIScript.laneNum = Random.Range(3, 5);
+                    }
+                    lastLaneNum = newAIScript.laneNum;
                 }
             }
             Debug.Log("Num of AI cars: " + AICars.Length);
