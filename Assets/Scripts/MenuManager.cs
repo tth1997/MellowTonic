@@ -1,28 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    public void Play()
+
+    Image fadeImg;
+    Color fadeColor;
+
+    private void Start()
     {
-        SceneManager.LoadScene(1);
-    }
-   
-    public void Instructions()
-    {
-        SceneManager.LoadScene(2);
+        fadeImg = GameObject.Find("FadeImg").GetComponent<Image>();
+        fadeColor = Color.black;
+        fadeImg.color = fadeColor;
+
+        StopCoroutine(FadeCoroutine());
+        StartCoroutine(FadeCoroutine());
     }
 
-    public void MainMenu()
+    IEnumerator FadeCoroutine()
     {
-        SceneManager.LoadScene(0);
-    }
+        while (true)
+        {
+            fadeColor.a -= Time.fixedDeltaTime / 6;
+            fadeImg.color = fadeColor;
 
-public void Quit()
-    {
-        Application.Quit();
-    }
+            if (fadeColor.a <= 0)
+            {
+                StopCoroutine(FadeCoroutine());
+            }
 
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
+    }
 }

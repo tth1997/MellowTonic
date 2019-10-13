@@ -5,6 +5,7 @@ using UnityEngine;
 public class MouseController : MonoBehaviour
 {
     public Vector3 rigOffset;
+    [HideInInspector]
     public Transform playerCarTransform;
     public Transform mouseAimTransform;
     public Transform camRigTransform;

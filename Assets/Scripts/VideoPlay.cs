@@ -11,23 +11,49 @@ public class VideoPlay : MonoBehaviour
     public VideoPlayer videoPlayer;
     public AudioSource audioSource;
 
+    Color fadeColor;
+
+    bool isPlayingVideo = false;
+
     void Start()
     {
-        StartCoroutine(PlayVideo());
-    
-    }
-    IEnumerator PlayVideo()
-
-    {
         videoPlayer.Prepare();
-        WaitForSeconds waitForSeconds = new WaitForSeconds(1);
-        while (!videoPlayer.isPrepared)
+        //StartCoroutine(PlayVideo());
+
+        fadeColor = Color.white;
+        rawImage.color = fadeColor;
+
+        StopCoroutine(FadeCoroutine());
+        StartCoroutine(FadeCoroutine());
+    }
+
+    private void Update()
+    {
+        if (videoPlayer.isPrepared && !isPlayingVideo)
         {
-            yield return waitForSeconds;
-            break;
+            rawImage.texture = videoPlayer.texture;
+            videoPlayer.Play();
+            audioSource.Play();
+            isPlayingVideo = true;
         }
-        rawImage.texture = videoPlayer.texture;
-        videoPlayer.Play();
-        audioSource.Play();
+    }
+
+    IEnumerator FadeCoroutine()
+    {
+        while (true)
+        {
+            fadeColor.r -= Time.fixedDeltaTime / 20;
+            fadeColor.g -= Time.fixedDeltaTime / 20;
+            fadeColor.b -= Time.fixedDeltaTime / 20;
+
+            rawImage.color = fadeColor;
+
+            if (fadeColor.r <= 0)
+            {
+                StopCoroutine(FadeCoroutine());
+            }
+
+            yield return new WaitForSeconds(Time.fixedDeltaTime);
+        }
     }
 }

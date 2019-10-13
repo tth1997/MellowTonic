@@ -134,7 +134,7 @@ public class AICarMovementScript : MonoBehaviour
         Transform closestLane = null;
         float closestDistSqr = Mathf.Infinity;
 
-        for (int i = 0; i < lanes.Length; i += 12)
+        for (int i = 0; i < lanes.Length; i += 1)
         {
             float distSqr = (lanes[i].transform.position - transform.position).sqrMagnitude;
 
@@ -372,6 +372,8 @@ public class AICarMovementScript : MonoBehaviour
         Gizmos.color = Color.red;
         if (carAgentTransform != null)
             Gizmos.DrawWireSphere(carAgentTransform.position, 2f);
+
+        Gizmos.DrawLine(waypointCurrent.position, waypointCurrent.position + Vector3.up * 10f);
     }
 }
 

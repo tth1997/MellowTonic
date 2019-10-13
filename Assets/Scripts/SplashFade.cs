@@ -7,18 +7,27 @@ using UnityEngine.SceneManagement;
 
 public class SplashFade : MonoBehaviour
 {
-    public float wait_time = 5f;
+    public float wait_time;
+
+    float remainingTime;
 
     void Start()
     {
         StartCoroutine(Wait_for_intro());
     }
 
+    private void Update()
+    {
+
+    }
+
     IEnumerator Wait_for_intro()
     {
         yield return new WaitForSeconds(wait_time);
 
-        SceneManager.LoadScene(2);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2);
+
+        //SceneManager.LoadScene(2);
     }
 }
 

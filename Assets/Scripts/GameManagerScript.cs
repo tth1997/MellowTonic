@@ -10,9 +10,10 @@ public class GameManagerScript : MonoBehaviour
     public GameObject AICar;
     bool paused = false;
 
-    int spawnLimit = 6;
+    int spawnLimit = 16;
     float spawnTimer;
     int lastLaneNum;
+    public bool spawnAI;
     bool isSpawning;
 
     void Start()
@@ -55,10 +56,13 @@ public class GameManagerScript : MonoBehaviour
             SceneManager.LoadScene(1);
         }
 
-        if (Time.time > spawnTimer && !isSpawning)
+        if (spawnAI)
         {
-            StartCoroutine(AICarSpawnCoroutine());
-            isSpawning = true;
+            if (Time.time > spawnTimer && !isSpawning)
+            {
+                StartCoroutine(AICarSpawnCoroutine());
+                isSpawning = true;
+            }
         }
     }
 
@@ -71,7 +75,16 @@ public class GameManagerScript : MonoBehaviour
             AICarMovementScript newAIScript;
 
             float newMoveSpeed = Random.Range(25f, 30.5f);
-            int newWaypoint = Random.Range(1, 3);
+            float waypointRandom = Random.Range(1f, 10f);
+            int newWaypoint;
+            if (waypointRandom > 6f)
+            {
+                newWaypoint = 2;
+            }
+            else
+            {
+                newWaypoint = 1;
+            }
 
             var AICars = FindObjectsOfType<AICarMovementScript>();
             if (AICars.Length < spawnLimit)
@@ -80,7 +93,7 @@ public class GameManagerScript : MonoBehaviour
                 {
                     if (newMoveSpeed > playerCarTransform.GetComponent<CarMovementScript>().carVel)
                     {
-                        newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x + 300f, -10000f, 390f), 2f, -200f), Quaternion.Euler(Vector3.zero));
+                        newAICar = Instantiate(AICar, new Vector3(Mathf.Clamp(playerCarTransform.position.x + 300f, -10000f, 390f), 2f, -120f), Quaternion.Euler(Vector3.zero));
                         newAIScript = newAICar.GetComponent<AICarMovementScript>();
                         newAIScript.moveSpeed = newMoveSpeed;
                         newAIScript.waypointNum = newWaypoint;
@@ -146,7 +159,7 @@ public class GameManagerScript : MonoBehaviour
             }
             Debug.Log("Num of AI cars: " + AICars.Length);
             Debug.Log("New AI car Instantiated.");
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(5f);
 
             yield return null;
         }

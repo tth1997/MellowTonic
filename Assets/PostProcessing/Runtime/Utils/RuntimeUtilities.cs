@@ -266,12 +266,15 @@ namespace UnityEngine.Rendering.PostProcessing
                     return s_CopyStdMaterial;
 
                 Assert.IsNotNull(s_Resources);
-                var shader = s_Resources.shaders.copyStd;
-                s_CopyStdMaterial = new Material(shader)
+                if (s_Resources.shaders.copyStd != null)
                 {
-                    name = "PostProcess - CopyStd",
-                    hideFlags = HideFlags.HideAndDontSave
-                };
+                    var shader = s_Resources.shaders.copyStd;
+                    s_CopyStdMaterial = new Material(shader)
+                    {
+                        name = "PostProcess - CopyStd",
+                        hideFlags = HideFlags.HideAndDontSave
+                    };
+                }
 
                 return s_CopyStdMaterial;
             }

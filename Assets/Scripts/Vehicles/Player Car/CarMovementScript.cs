@@ -71,20 +71,20 @@ public class CarMovementScript : MonoBehaviour
 
     // Fatigue Effects for Steering
     [HideInInspector]
-    public float currentAccelSwayMagnitude;
-    float accelSwayMagnitudeRate = 2.7f;
+    public float currentAccelSwayMagnitude;                                                         // RESET THIS TO 0 AT REST STOP
+    float accelSwayMagnitudeRate = 4.16f;
     float accelSwayMagnitudeLimit = 500f;
 
     [HideInInspector]
     public float currentSteerSwayMagnitude;                                                          // RESET THIS TO 0 AT REST STOP
-    float steerSwayMagnitudeRate = 0.013f;
+    float steerSwayMagnitudeRate = 0.033f;
     float steerSwayMagnitudeLimit = 4f;
 
     [HideInInspector]
     public float inputDelayTime;                                                                // RESET THIS TO 0 AT REST STOP
     int inputDelayFrames;
     float inputDelayLimit = 0.5f;
-    float inputDelayRate = 0.0016f;
+    float inputDelayRate = 0.0027f;
     List<float> mouseAimYRotations = new List<float>();
 
     // Fatigue Effects for Camera
@@ -93,7 +93,7 @@ public class CarMovementScript : MonoBehaviour
     private DepthOfField depthOfField;
     [HideInInspector]
     public float currentFocusDistance = 0.5f;                                                   // RESET THIS TO 0.5f AT REST STOP
-    float focusDistanceRate = 0.0013f;
+    float focusDistanceRate = 0.003f;
     float focusDistanceMax = 0.5f;
     float focusDistanceMin = 0.14f;
 
@@ -332,7 +332,7 @@ public class CarMovementScript : MonoBehaviour
             {
                 fadeColor.a = Mathf.Clamp(fadeColor.a + fadeRate, 0, 1);
                 blackoutImg.color = fadeColor;
-                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp - fadeRate, 0, 1);
+                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp - fadeRate, 0.1f, 1f);
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
@@ -350,7 +350,7 @@ public class CarMovementScript : MonoBehaviour
             {
                 fadeColor.a = Mathf.Clamp(fadeColor.a - (fadeRate * 4), 0, 1);
                 blackoutImg.color = fadeColor;
-                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp + fadeRate * 4, 0, 1);
+                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp + fadeRate * 4, 0.1f, 1);
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
