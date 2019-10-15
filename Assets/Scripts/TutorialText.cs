@@ -40,7 +40,7 @@ public class TutorialText : MonoBehaviour
     {
         if (_tutorialCount == 0)
         {
-            tutorialText.text = "Use W and S keys to change car speed.";
+            tutorialText.text = "Use the 'W' and 'S' keys to increase or decrease the cars speed.";
         }
 
         if(_tutorialCount == 1)
@@ -51,7 +51,7 @@ public class TutorialText : MonoBehaviour
 
         if (_tutorialCount == 2)
         {
-            tutorialText.text = "Use mouse to steer the car.";
+            tutorialText.text = "Use the mouse to steer the cars direction.";
 
         }
 
@@ -65,11 +65,6 @@ public class TutorialText : MonoBehaviour
         {
             tutorialText.text = "Holding 'Right Click' will allow free look movement.";
 
-        }
-
-        if (_tutorialCount == 5)
-        {
-            tutorialText.text = "Pressing 'Q' will bring up phone";
         }
     }
 }
