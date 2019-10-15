@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - TutorialTrigger
+  - Waypoint2
+  - Waypoint1
+  - RestStopTrigger
+  - Lane
+  - SlowSpeedTrigger
   layers:
   - Default
   - TransparentFX

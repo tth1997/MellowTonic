@@ -265,8 +265,8 @@ namespace UnityEngine.Rendering.PostProcessing
                 if (s_CopyStdMaterial != null)
                     return s_CopyStdMaterial;
 
-                Assert.IsNotNull(s_Resources);
-                if (s_Resources.shaders.copyStd != null)
+                //Assert.IsNotNull(s_Resources);
+                if (s_Resources != null && s_Resources.shaders.copyStd != null)
                 {
                     var shader = s_Resources.shaders.copyStd;
                     s_CopyStdMaterial = new Material(shader)

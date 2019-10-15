@@ -21,6 +21,8 @@ public class CarMovementScript : MonoBehaviour
     public float pid_maxMotorForce;
     public float pid_minMotorForce;
 
+    public bool slowed;
+
     // Steering PID
     CarSteeringPID SteerPID = new CarSteeringPID();
     public float pid_Kp2 = 1f;
@@ -53,6 +55,7 @@ public class CarMovementScript : MonoBehaviour
     float oldCarVel;
     [HideInInspector]
     public float targetVel;
+    float maxTargetVel;
     [HideInInspector]
     public bool PIDActive;
 
@@ -83,13 +86,6 @@ public class CarMovementScript : MonoBehaviour
     float steerSwayMagnitudeRate = 0.033f;
     float steerSwayMagnitudeLimit = 4f;
 
-    [HideInInspector]
-    public float inputDelayTime;                        // RESET THIS TO 0 AT REST STOP
-    int inputDelayFrames;
-    float inputDelayLimit = 0.5f;
-    float inputDelayRate = 0.0027f;
-    List<float> mouseAimYRotations = new List<float>();
-
     public float steerRate = 80f; // How fast the wheels can steer (degrees per second).    RESET THIS TO CarMovementScript.maxSteerRate AT REST STOP
     float steerRateLoss = 0.33f;
     float minSteerRate = 40f;
@@ -101,12 +97,12 @@ public class CarMovementScript : MonoBehaviour
     private DepthOfField depthOfField;
     [HideInInspector]
     public float currentFocusDistance = 0.5f;           // RESET THIS TO 0.5f AT REST STOP
-    float focusDistanceRate = 0.0017f;
-    float focusDistanceMax = 0.5f;
-    float focusDistanceMin = 0.3f;
+    float focusDistanceRate = 0.00075f;
+    public float focusDistanceMax = 0.25f;
+    float focusDistanceMin = 0.16f;
 
     float focalLengthDefault = 5f;
-    float apertureDefault = 0.5f;
+    float apertureDefault = 1f;
 
     private Vignette vignette;
     public float vignetteIntensity;                 // RESET THIS TO 0.5f AT REST STOP
@@ -120,7 +116,8 @@ public class CarMovementScript : MonoBehaviour
     public float blackoutTimer;                         // RESET THIS TO Time.time + 180 AT REST STOP
     public float blackoutTimerDefault = 180f;
     float blackoutRate = 20f; // The amount of time between blackouts.
-    public float blackoutBaseDuration = 0.1f;           // RESET THIS TO 0.5f AT REST STOP
+    public float blackoutBaseDuration = 0.1f;           // RESET THIS TO CarMovementScript.blackoutBaseDurationDefault AT REST STOP
+    public float blackoutDurationDefault = 0.1f;
     bool isBlackingOut = false;
     bool blackedOut = false;
     bool fadingIn;
@@ -135,6 +132,8 @@ public class CarMovementScript : MonoBehaviour
     float crashAccel = 7.5f;
     [SerializeField]
     bool hasCrashed = false;
+
+    public bool allowDebugging;
 
 
         // START BLOCK //
@@ -159,6 +158,8 @@ public class CarMovementScript : MonoBehaviour
         postProcVolume.profile.TryGetSettings(out depthOfField);
         depthOfField.aperture.value = apertureDefault;
         depthOfField.focalLength.value = focalLengthDefault;
+
+        postProcVolume.profile.TryGetSettings(out vignette);
         vignette.intensity.value = 0;
 
         blackoutTimer = Time.time + blackoutTimerDefault;
@@ -207,15 +208,27 @@ public class CarMovementScript : MonoBehaviour
 
     void Accelerate()
     {
-        // Acceleration & Reverse
-        if (verticalInput == 0)
+        if (slowed)
         {
-            PIDActive = true;
+            maxTargetVel = 11.11f;
         }
-        if (verticalInput != 0)
+        else
+        {
+            maxTargetVel = 33.33f;
+        }
+
+        // Acceleration & Reverse
+
+        if (verticalInput != 0 && carVel < maxTargetVel)
         {
             PIDActive = false;
-            targetVel = carVel;
+            targetVel = Mathf.Clamp(carVel,
+                                    0, 
+                                    maxTargetVel);
+        }
+        else
+        {
+            PIDActive = true;
         }
 
         // Acceleration PID
@@ -248,8 +261,6 @@ public class CarMovementScript : MonoBehaviour
             frontLeftW.brakeTorque = 0f;
             frontRightW.brakeTorque = 0f;
         }
-
-
     }
 
     void InputCheck()
@@ -274,7 +285,7 @@ public class CarMovementScript : MonoBehaviour
 
         if (swayTimer > Time.time)
         {
-            InputDelay();
+            SteeringRate();
             SteeringSway();
             AcceleratorSway();
         }
@@ -286,34 +297,16 @@ public class CarMovementScript : MonoBehaviour
 
         CheckRoll();
         CollisionCheck();
+
+        if (allowDebugging)
+            Debugging();
     }
 
-    void InputDelay()
+    void SteeringRate()
     {
-        steerRotation = mouseRigObject.GetComponent<MouseController>().mouseAimTransform.eulerAngles.y;
-        /*
-        mouseAimYRotations.Insert(0, mouseRigObject.GetComponent<MouseController>().mouseAimTransform.eulerAngles.y);
-
-        // Delete any rotations that have persisted for more than 3 seconds.
-        if (mouseAimYRotations.Count > Mathf.RoundToInt(3f / Time.fixedDeltaTime))
-        {
-            mouseAimYRotations.RemoveAt(mouseAimYRotations.Count - 1);
-        }
-
-        steerRotation = mouseAimYRotations[Mathf.RoundToInt(inputDelayTime / Time.fixedDeltaTime)];
-
-        inputDelayFrames = Mathf.RoundToInt(inputDelayTime / Time.fixedDeltaTime);
-
-        inputDelayTime += Mathf.Clamp(inputDelayRate * Time.fixedDeltaTime, 
-                                      0, 
-                                      inputDelayLimit);
-        */
-        
-
         steerRate = Mathf.Clamp(steerRate - steerRateLoss * Time.fixedDeltaTime,
                                 minSteerRate,
                                 maxSteerRate);
-
     }
     void SteeringSway()
     {
@@ -359,10 +352,6 @@ public class CarMovementScript : MonoBehaviour
             StartCoroutine(BlackoutFade());
             Debug.Log("Blackout Coroutine Started.");
         }
-        else
-        {
-            StopCoroutine(BlackoutFade());
-        }
     }
     IEnumerator BlackoutFade()
     {
@@ -390,7 +379,7 @@ public class CarMovementScript : MonoBehaviour
 
             if (fadeColor.a > 0 && fadingOut)
             {
-                fadeColor.a = Mathf.Clamp(fadeColor.a - (fadeRate * 4), 0, 1);
+                fadeColor.a = Mathf.Clamp(fadeColor.a - (fadeRate * 6), 0, 1);
                 blackoutImg.color = fadeColor;
                 SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp + fadeRate * 4, 0.5f, 1f);
                 yield return new WaitForSeconds(Time.deltaTime);
@@ -404,6 +393,13 @@ public class CarMovementScript : MonoBehaviour
                 fadingOut = false;
                 Debug.Log("Blackout Coroutine Cycle complete.");
             }
+
+            if (Time.time < blackoutTimer)
+            {
+                isBlackingOut = false;
+
+                StopCoroutine(BlackoutFade());
+            }
         }
     }
 
@@ -414,6 +410,8 @@ public class CarMovementScript : MonoBehaviour
         
         if (!freeLook)
         {
+            steerRotation = mouseRigObject.GetComponent<MouseController>().mouseAimTransform.eulerAngles.y;
+
             steeringAngle = Mathf.Clamp(
                             SteerPID.Cycle(transform.rotation.eulerAngles.y,
                                            steerRotation,
@@ -467,6 +465,31 @@ public class CarMovementScript : MonoBehaviour
         }
 
         oldCarVel = carVel;
+    }
+
+
+    void Debugging()
+    {
+        if (Physics.SphereCast(transform.position, 0.5f, transform.forward, out RaycastHit rayHit))
+        {
+            Debug.Log(rayHit.collider.name);
+        }
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "SlowSpeedTrigger")
+        {
+            slowed = true;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "SlowSpeedTrigger")
+        {
+            slowed = false;
+        }
     }
 }
 

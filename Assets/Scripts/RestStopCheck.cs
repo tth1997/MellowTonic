@@ -30,14 +30,14 @@ public class RestStopCheck : MonoBehaviour
     {
         if(inRest == true)
         {
-            
-            
-            carMovementScript.inputDelayTime = 0;
+
+            carMovementScript.vignetteIntensity = 0;
+            carMovementScript.steerRate = carMovementScript.maxSteerRate;
             carMovementScript.currentSteerSwayMagnitude = 0;
             carMovementScript.currentAccelSwayMagnitude = 0;
-            carMovementScript.currentFocusDistance = .5f;
-            carMovementScript.blackoutTimer = Time.time + 180;
-            carMovementScript.blackoutBaseDuration = .1f;
+            carMovementScript.currentFocusDistance = carMovementScript.focusDistanceMax;
+            carMovementScript.blackoutTimer = carMovementScript.blackoutTimerDefault;
+            carMovementScript.blackoutBaseDuration = carMovementScript.blackoutDurationDefault;
 
         }
         
