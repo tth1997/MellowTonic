@@ -26,7 +26,6 @@ public class CarMovementScript : MonoBehaviour
     public float pid_Kp2 = 1f;
     public float pid_Ki2 = 1f;
     public float pid_Kd2 = 1f;
-    float maxSteerRate = 120f; // How fast the wheels can steer (degrees per second)
     float pid_maxSteerAngle = 30f;
 
     // Acceleration
@@ -71,41 +70,57 @@ public class CarMovementScript : MonoBehaviour
 
     // Fatigue Effects for Steering
     [HideInInspector]
-    public float currentAccelSwayMagnitude;                                                         // RESET THIS TO 0 AT REST STOP
+    public float swayTimer;                             // RESET THIS TO Time.time + CarMovementScript.swayTimerDefault AT REST STOP
+    public float swayTimerDefault = 60; 
+
+    [HideInInspector]
+    public float currentAccelSwayMagnitude;             // RESET THIS TO 0 AT REST STOP
     float accelSwayMagnitudeRate = 4.16f;
     float accelSwayMagnitudeLimit = 500f;
 
     [HideInInspector]
-    public float currentSteerSwayMagnitude;                                                          // RESET THIS TO 0 AT REST STOP
+    public float currentSteerSwayMagnitude;             // RESET THIS TO 0 AT REST STOP
     float steerSwayMagnitudeRate = 0.033f;
     float steerSwayMagnitudeLimit = 4f;
 
     [HideInInspector]
-    public float inputDelayTime;                                                                // RESET THIS TO 0 AT REST STOP
+    public float inputDelayTime;                        // RESET THIS TO 0 AT REST STOP
     int inputDelayFrames;
     float inputDelayLimit = 0.5f;
     float inputDelayRate = 0.0027f;
     List<float> mouseAimYRotations = new List<float>();
+
+    public float steerRate = 80f; // How fast the wheels can steer (degrees per second).    RESET THIS TO CarMovementScript.maxSteerRate AT REST STOP
+    float steerRateLoss = 0.33f;
+    float minSteerRate = 40f;
+    public float maxSteerRate = 80f;
 
     // Fatigue Effects for Camera
     private PostProcessVolume postProcVolume;
 
     private DepthOfField depthOfField;
     [HideInInspector]
-    public float currentFocusDistance = 0.5f;                                                   // RESET THIS TO 0.5f AT REST STOP
-    float focusDistanceRate = 0.003f;
+    public float currentFocusDistance = 0.5f;           // RESET THIS TO 0.5f AT REST STOP
+    float focusDistanceRate = 0.0017f;
     float focusDistanceMax = 0.5f;
-    float focusDistanceMin = 0.14f;
+    float focusDistanceMin = 0.3f;
 
     float focalLengthDefault = 5f;
     float apertureDefault = 0.5f;
 
+    private Vignette vignette;
+    public float vignetteIntensity;                 // RESET THIS TO 0.5f AT REST STOP
+    float vignetteRate = 0.0033f;
+    float maxVignetteIntensity = 0.6f;
+
+    [HideInInspector]
     public Image blackoutImg;
     Color fadeColor;
-    //[HideInInspector]
-    public float blackoutTimer;                                                                 // RESET THIS TO Time.time + 180 AT REST STOP
+    [HideInInspector]
+    public float blackoutTimer;                         // RESET THIS TO Time.time + 180 AT REST STOP
+    public float blackoutTimerDefault = 180f;
     float blackoutRate = 20f; // The amount of time between blackouts.
-    public float blackoutBaseDuration = 0.1f;                                                          // RESET THIS TO 0.5f AT REST STOP
+    public float blackoutBaseDuration = 0.1f;           // RESET THIS TO 0.5f AT REST STOP
     bool isBlackingOut = false;
     bool blackedOut = false;
     bool fadingIn;
@@ -144,7 +159,10 @@ public class CarMovementScript : MonoBehaviour
         postProcVolume.profile.TryGetSettings(out depthOfField);
         depthOfField.aperture.value = apertureDefault;
         depthOfField.focalLength.value = focalLengthDefault;
-        blackoutTimer += Time.time;
+        vignette.intensity.value = 0;
+
+        blackoutTimer = Time.time + blackoutTimerDefault;
+        swayTimer = Time.time + swayTimerDefault;
 
         blackoutImg = GameObject.Find("BlackoutImg").GetComponent<Image>();
         blackoutImg.color = Color.clear;
@@ -252,10 +270,15 @@ public class CarMovementScript : MonoBehaviour
     private void FixedUpdate()
     {
         // Fatigue Effects
-        InputDelay();
-        SteeringSway();
-        AcceleratorSway();
         CamBlur();
+
+        if (swayTimer > Time.time)
+        {
+            InputDelay();
+            SteeringSway();
+            AcceleratorSway();
+        }
+
         CamBlackout();
 
         Steer();
@@ -267,6 +290,8 @@ public class CarMovementScript : MonoBehaviour
 
     void InputDelay()
     {
+        steerRotation = mouseRigObject.GetComponent<MouseController>().mouseAimTransform.eulerAngles.y;
+        /*
         mouseAimYRotations.Insert(0, mouseRigObject.GetComponent<MouseController>().mouseAimTransform.eulerAngles.y);
 
         // Delete any rotations that have persisted for more than 3 seconds.
@@ -282,30 +307,47 @@ public class CarMovementScript : MonoBehaviour
         inputDelayTime += Mathf.Clamp(inputDelayRate * Time.fixedDeltaTime, 
                                       0, 
                                       inputDelayLimit);
+        */
+        
+
+        steerRate = Mathf.Clamp(steerRate - steerRateLoss * Time.fixedDeltaTime,
+                                minSteerRate,
+                                maxSteerRate);
+
     }
     void SteeringSway()
     {
         SteerPID.steeringSwayMagnitude = currentSteerSwayMagnitude;
 
         currentSteerSwayMagnitude = Mathf.Clamp(currentSteerSwayMagnitude + steerSwayMagnitudeRate * Time.fixedDeltaTime, 
-                                           0, 
-                                           steerSwayMagnitudeLimit);
+                                                0, 
+                                                steerSwayMagnitudeLimit);
     }
     void AcceleratorSway()
     {
         AccelPID.acceleratorSwayMagnitude = currentAccelSwayMagnitude;
 
         currentAccelSwayMagnitude = Mathf.Clamp(currentAccelSwayMagnitude + accelSwayMagnitudeRate * Time.fixedDeltaTime,
-                                           0,
-                                           accelSwayMagnitudeLimit);
+                                                0,
+                                                accelSwayMagnitudeLimit);
     }
     void CamBlur()
     {
+        // Blur
         currentFocusDistance = Mathf.Clamp(currentFocusDistance - (focusDistanceRate * Time.fixedDeltaTime), 
                                            focusDistanceMin,
                                            focusDistanceMax);
 
         depthOfField.focusDistance.value = currentFocusDistance;
+        
+        // Vignette
+        vignetteIntensity = Mathf.Clamp(vignetteIntensity - (vignetteRate * Time.fixedDeltaTime),
+                                        0,
+                                        maxVignetteIntensity);
+
+        vignette.intensity.value = vignetteIntensity;
+
+        
     }
     void CamBlackout()
     {
@@ -332,7 +374,7 @@ public class CarMovementScript : MonoBehaviour
             {
                 fadeColor.a = Mathf.Clamp(fadeColor.a + fadeRate, 0, 1);
                 blackoutImg.color = fadeColor;
-                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp - fadeRate, 0.1f, 1f);
+                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp - fadeRate, 0.5f, 1f);
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
@@ -350,7 +392,7 @@ public class CarMovementScript : MonoBehaviour
             {
                 fadeColor.a = Mathf.Clamp(fadeColor.a - (fadeRate * 4), 0, 1);
                 blackoutImg.color = fadeColor;
-                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp + fadeRate * 4, 0.1f, 1);
+                SteerPID.steeringDamp = Mathf.Clamp(SteerPID.steeringDamp + fadeRate * 4, 0.5f, 1f);
                 yield return new WaitForSeconds(Time.deltaTime);
             }
 
@@ -376,8 +418,8 @@ public class CarMovementScript : MonoBehaviour
                             SteerPID.Cycle(transform.rotation.eulerAngles.y,
                                            steerRotation,
                                            Time.fixedDeltaTime),
-                            steeringAngle - (maxSteerRate * Time.fixedDeltaTime),
-                            steeringAngle + (maxSteerRate * Time.fixedDeltaTime));
+                            steeringAngle - (steerRate * Time.fixedDeltaTime),
+                            steeringAngle + (steerRate * Time.fixedDeltaTime));
 
 
 
