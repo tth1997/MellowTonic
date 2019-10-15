@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
-    public bool tutorial;
+    public bool usingTutorial;
     public int tutorialCount;
-    public GameObject tutorialText;
+    [HideInInspector]
+    public GameObject tutorial;
 
     // Start is called before the first frame update
     void Start()
     {
         
         tutorialCount = 0;
+
+        tutorial = GameObject.Find("Tutorial");
+        tutorial.SetActive(false);
     }
 
     // Update is called once per frame
@@ -24,7 +28,7 @@ public class TutorialManager : MonoBehaviour
     {
         if(other.tag == "TutorialTrigger")
         {
-            tutorialText.SetActive(true);
+            tutorial.SetActive(true);
         }        
     }
 
@@ -32,7 +36,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (other.tag == "TutorialTrigger")
         {
-            tutorialText.SetActive(false);
+            tutorial.SetActive(false);
             tutorialCount++;
             Debug.Log(tutorialCount);
         }
