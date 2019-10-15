@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GPS : MonoBehaviour
+public class PhoneNotification : MonoBehaviour
 {
     public AudioClip SoundToPlay;
     public float Volume;
