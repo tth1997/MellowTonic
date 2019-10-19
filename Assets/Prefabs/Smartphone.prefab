@@ -193,7 +193,64 @@ MonoBehaviour:
 
 
 
-    Great choice! I''ll get to it :)'
+    Great choice! I''ll get to it :)
+
+
+
+
+
+
+
+
+
+
+    Alright, but don''t take too long! Dinner''s almost ready
+
+
+    Dinner''s here! How long have you got to go?
+
+
+
+
+    I bet :( You''ve been working overtime a lot recently... Don''t think I''ve seen
+    you more than a few times this week
+
+
+
+
+
+    Yeah, I know...
+
+
+
+
+
+    See you
+
+
+
+
+    Sounds like you''re taking another rest?
+
+
+    That''s fine... I''ll leave dinner in the fridge for you
+
+
+
+    You''ve been pretty far this whole week, Will
+
+
+    Sorry... it''s just been a lonely week. Feeling a bit like I was about a year
+    ago, before we met
+
+
+
+
+    I have an empty makeup drawer that used to be for meds.
+
+
+    Didn''t need most of them after I met you, though. Anyways, you''re tired, I''m
+    talking too much. Get some rest hon, I''ll see you when I see you :)'
 --- !u!1 &7430743011530021133
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,7 +261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7430743011530021132}
   - component: {fileID: 7430743011530021134}
-  - component: {fileID: 7430743011530021135}
+  - component: {fileID: 4059949647765757399}
   m_Layer: 0
   m_Name: Smartphone
   m_TagString: Untagged
@@ -248,7 +305,7 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &7430743011530021135
+--- !u!114 &4059949647765757399
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,7 +314,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7430743011530021133}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81ab7e1c1830f11488567889846bc80d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9b6fad68d9dfa1a4b8c5344cc3ce811e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   holdUp: 0
@@ -406,7 +463,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scrollRect: {fileID: 7430743010976617296}
-  scrollAmount: 0
+  scrollAmount: 1
   LHText: {fileID: 0}
   RHText: {fileID: 0}
   messageDelayTime: 5
@@ -427,10 +484,13 @@ Animation:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7430743012029689215}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Animation: {fileID: 7400000, guid: 4e5086d7fada51c49a054fbde9172daf, type: 2}
   m_Animations:
+  - {fileID: 7400000, guid: 909efebc63eea3445bc0068016e90563, type: 2}
+  - {fileID: 7400000, guid: b921476a30ad90f4890539f886ef0c78, type: 2}
+  - {fileID: 7400000, guid: eac53137281dae848ab6adcce5c982d2, type: 2}
   - {fileID: 7400000, guid: 4e5086d7fada51c49a054fbde9172daf, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
@@ -537,8 +597,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7430743012207300598}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0002}
+  m_LocalScale: {x: 1, y: 1.1341, z: 1}
   m_Children:
   - {fileID: 7430743012293240695}
   - {fileID: 7430743011068445216}
@@ -547,7 +607,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0026855469}
+  m_AnchoredPosition: {x: 1, y: 0}
   m_SizeDelta: {x: 30, y: 1000}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &7430743012249505973
@@ -677,7 +737,73 @@ MonoBehaviour:
 
 
 
-    Guess I''ll take the salad then...'
+    Guess I''ll take the salad then...
+
+
+
+
+
+
+
+
+
+    Hey, just stopping for a rest. long day
+
+
+
+
+
+
+
+
+
+    Pretty far... just really tired as well
+
+
+
+
+
+
+
+
+
+    I know, I''m sorry. But bills need paying and all that, y''know
+
+
+    Right, gonna have a quick rest, see you soon
+
+
+    Hey. Getting close I think. See soon.
+
+
+
+
+    Yep...
+
+
+
+
+
+    I''m not that for now
+
+
+
+
+
+
+
+
+
+
+
+
+    Before we met? What was that like?
+
+
+
+
+
+    Oh...'
 --- !u!1 &7430743012538452862
 GameObject:
   m_ObjectHideFlags: 0

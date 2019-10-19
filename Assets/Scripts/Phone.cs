@@ -19,8 +19,15 @@ public class Phone : MonoBehaviour
         {
             audio.PlayOneShot(SoundToPlay, Volume);
             alreadyPlayed = true;
+            Debug.Log("phone notification triggered");
         }
 
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        alreadyPlayed = false;
+        Debug.Log("notification trigger reset");
     }
 }
 
