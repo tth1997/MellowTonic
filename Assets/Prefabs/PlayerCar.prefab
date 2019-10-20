@@ -517,6 +517,7 @@ MonoBehaviour:
   pid_Kd1: 5
   pid_maxMotorForce: 1000
   pid_minMotorForce: -10
+  slowed: 0
   pid_Kp2: 1
   pid_Ki2: 0
   pid_Kd2: 0.2
@@ -524,16 +525,24 @@ MonoBehaviour:
   targetVel: 0
   PIDActive: 0
   mouseRigObject: {fileID: 0}
+  swayTimer: 0
+  swayTimerDefault: 60
   currentAccelSwayMagnitude: 0
   currentSteerSwayMagnitude: 0
-  inputDelayTime: 0
+  steerRate: 80
+  maxSteerRate: 80
   currentFocusDistance: 0.5
+  focusDistanceMax: 0.25
+  vignetteIntensity: 0
   blackoutImg: {fileID: 0}
   blackoutTimer: 180
+  blackoutTimerDefault: 180
   blackoutBaseDuration: 0.1
+  blackoutDurationDefault: 0.1
   speedTxt: {fileID: 0}
   gameManagerScript: {fileID: 0}
   hasCrashed: 0
+  allowDebugging: 0
 --- !u!114 &6696457679924976875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,6 +1127,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -30
       objectReference: {fileID: 0}
+    - target: {fileID: 7430743012029689214, guid: a90f627c4a6a99f448c78d2f698fc164,
+        type: 3}
+      propertyPath: m_Animations.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7430743012029689214, guid: a90f627c4a6a99f448c78d2f698fc164,
+        type: 3}
+      propertyPath: m_Animation
+      value: 
+      objectReference: {fileID: 7400000, guid: 4e5086d7fada51c49a054fbde9172daf, type: 2}
+    - target: {fileID: 7430743012029689214, guid: a90f627c4a6a99f448c78d2f698fc164,
+        type: 3}
+      propertyPath: m_Animations.Array.data[3]
+      value: 
+      objectReference: {fileID: 7400000, guid: 4e5086d7fada51c49a054fbde9172daf, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a90f627c4a6a99f448c78d2f698fc164, type: 3}
 --- !u!4 &8878997180489032197 stripped

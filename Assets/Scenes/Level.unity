@@ -7295,6 +7295,28 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 843460015}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &799503752 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1536502778, guid: 7d6184d657fed4bec8fe9b5498b833c2,
+    type: 3}
+  m_PrefabInstance: {fileID: 868769827}
+  m_PrefabAsset: {fileID: 0}
+--- !u!111 &799503753
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799503752}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: c4a2e70ec7ed7b041a50ec8fa9fab60c, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: c4a2e70ec7ed7b041a50ec8fa9fab60c, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!4 &810789281 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7259747124787145559, guid: f0a71ba657660e848be5dc7d98b0263f,
@@ -8043,6 +8065,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1899432984, guid: 7d6184d657fed4bec8fe9b5498b833c2, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1536502780, guid: 7d6184d657fed4bec8fe9b5498b833c2, type: 3}
+      propertyPath: m_Color.a
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -19808,28 +19834,28 @@ PrefabInstance:
     - target: {fileID: 8878997182136850039, guid: 346c932364308404886de89ea0038861,
         type: 3}
       propertyPath: m_Animations.Array.size
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 8878997182136850039, guid: 346c932364308404886de89ea0038861,
-        type: 3}
-      propertyPath: m_Animation
-      value: 
-      objectReference: {fileID: 7400000, guid: 4e5086d7fada51c49a054fbde9172daf, type: 2}
     - target: {fileID: 8878997182136850039, guid: 346c932364308404886de89ea0038861,
         type: 3}
       propertyPath: m_Animations.Array.data[3]
       value: 
-      objectReference: {fileID: 7400000, guid: 4e5086d7fada51c49a054fbde9172daf, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8878997182136850039, guid: 346c932364308404886de89ea0038861,
         type: 3}
       propertyPath: m_PlayAutomatically
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8878997182136850039, guid: 346c932364308404886de89ea0038861,
         type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8878997182136850039, guid: 346c932364308404886de89ea0038861,
+        type: 3}
+      propertyPath: m_Animation
+      value: 
+      objectReference: {fileID: 7400000, guid: 909efebc63eea3445bc0068016e90563, type: 2}
     m_RemovedComponents:
     - {fileID: 8878997180489032198, guid: 346c932364308404886de89ea0038861, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 346c932364308404886de89ea0038861, type: 3}
