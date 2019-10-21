@@ -84,7 +84,7 @@ public class AICarMovementScript : MonoBehaviour
         Transform closestLaneTransform = FindClosestLane(GameObject.FindGameObjectsWithTag("Lane"));
         transform.position = new Vector3(transform.position.x, transform.position.y, closestLaneTransform.position.z); 
 
-        carAgentTransform = Instantiate(carAgentObject, transform.position, Quaternion.identity).transform;
+        carAgentTransform = Instantiate(carAgentObject, transform.position + transform.forward * 5f, Quaternion.identity).transform;
         carAgent = carAgentTransform.GetComponent<NavMeshAgent>();
 
         waypointCurrent = GameObject.FindGameObjectWithTag("Waypoint" + waypointNum.ToString()).transform;
@@ -110,7 +110,6 @@ public class AICarMovementScript : MonoBehaviour
             carAgent.areaMask = 1 << NavMesh.GetAreaFromName("Lane B2");
 
 
-
         carAgent.speed = 50f;
         carAgent.acceleration = 50f;
         carAgent.enabled = true;
@@ -119,12 +118,23 @@ public class AICarMovementScript : MonoBehaviour
         if (carAgent.FindClosestEdge(out navHit))
         {
             transform.position = navHit.position;
-            carAgentTransform.position = transform.forward * agentMaxDistance;
+            carAgentTransform.position = transform.position + transform.forward * agentMaxDistance;
         }
-        
+
+        if (waypointCurrent != null && carAgent.isOnNavMesh)
+        {
+            carAgent.SetDestination(waypointCurrent.position);
+        }
+        else
+        {
+            if (waypointCurrent == null)
+                Debug.LogError("Waypoint not found!");
+            if (!carAgent.isOnNavMesh)
+                Debug.LogError("Agent is not close enough to NavMesh!");
+        }
+
         InitializeAccelPID();
         InitializeSteerPID();
-
 
         Debug.Log("New AI car at: " + transform.position);
     }
@@ -297,18 +307,6 @@ public class AICarMovementScript : MonoBehaviour
 
     public void NavAgentUpdate()
     {
-        if (waypointCurrent != null && carAgent.isOnNavMesh)
-        {
-            carAgent.SetDestination(waypointCurrent.position);
-        }
-        else
-        { 
-        if (waypointCurrent == null)
-            Debug.LogError("Waypoint not found!");
-        if (!carAgent.isOnNavMesh)
-            Debug.LogError("Agent is not close enough to NavMesh!");
-        }
-
         carAgentTransform.position = new Vector3(Mathf.Clamp(carAgentTransform.position.x, transform.position.x - agentMaxDistance, transform.position.x + agentMaxDistance),
                                                  Mathf.Clamp(carAgentTransform.position.y, transform.position.y - agentMaxDistance, transform.position.y + agentMaxDistance),
                                                  Mathf.Clamp(carAgentTransform.position.z, transform.position.z - agentMaxDistance, transform.position.z + agentMaxDistance));
@@ -338,6 +336,8 @@ public class AICarMovementScript : MonoBehaviour
             frontLeftW.brakeTorque = brakeForce;
             frontRightW.brakeTorque = brakeForce;
             currentBrakeForce = brakeForce;
+
+            Destroy(carAgent.gameObject);
         }
     }
     void CollisionCheck()
@@ -359,6 +359,8 @@ public class AICarMovementScript : MonoBehaviour
             frontLeftW.brakeTorque = brakeForce;
             frontRightW.brakeTorque = brakeForce;
             currentBrakeForce = brakeForce;
+
+            Destroy(carAgent.gameObject);
         }
 
         oldAIVel = AIVel;

@@ -125,6 +125,8 @@ public class CarMovementScript : MonoBehaviour
 
     // Text & UI
     public Text speedTxt;
+    [HideInInspector]
+    public PhoneDialogueManager phoneDialogueManager;
 
     // End-State & Game Management
     [HideInInspector]
@@ -170,6 +172,8 @@ public class CarMovementScript : MonoBehaviour
         fadeColor = Color.clear;
 
         speedTxt = GameObject.Find("SpeedTxt").GetComponent<Text>();
+
+        phoneDialogueManager = GetComponentInChildren<PhoneDialogueManager>();
 
         gameManagerScript = GameObject.Find("EventSystem").GetComponent<GameManagerScript>();
 
@@ -482,6 +486,11 @@ public class CarMovementScript : MonoBehaviour
         if (other.tag == "SlowSpeedTrigger")
         {
             slowed = true;
+        }
+
+        if (other.tag == "RestStopTrigger")
+        {
+            phoneDialogueManager.PlayAnimation();
         }
     }
     private void OnTriggerExit(Collider other)

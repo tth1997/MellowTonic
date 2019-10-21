@@ -21,38 +21,12 @@ public class PhoneDialogueManager : MonoBehaviour
 
     }
 
-    void OnTriggerEnter(Collider other)
+    public void PlayAnimation()
     {
-        if (other.tag == "RestStopTrigger")
-        {
-            PlayAnimation();
-            Debug.Log("Dialogue Animation"+ dialogueCount);
-        }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "RestStopTrigger")
-        {
-            dialogueCount++;
-        }
-    }
+        dialogueScroll.Play("TextScrollAni" + dialogueCount.ToString());
+        Debug.Log("Dialogue Animation: " + dialogueCount);
 
-    void PlayAnimation()
-    {
-        if (dialogueCount == 1)
-        {
-            dialogueScroll.Play("TextScrollAni1");
-        }
-
-        if (dialogueCount == 2)
-        {
-            dialogueScroll.Play("TextScrollAni2");
-        }
-
-        if (dialogueCount == 3)
-        {
-            dialogueScroll.Play("TextScrollAni3");
-        }
+        dialogueCount++;
     }
 }
