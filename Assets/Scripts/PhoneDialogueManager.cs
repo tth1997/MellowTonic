@@ -10,7 +10,7 @@ public class PhoneDialogueManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        dialogueCount = 0;
+        dialogueCount = 1;
         dialogueScroll = GetComponent <Animation>();
 
     }

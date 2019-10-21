@@ -19849,11 +19849,6 @@ PrefabInstance:
       propertyPath: allowDebugging
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8878997182136849928, guid: 346c932364308404886de89ea0038861,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8878997181954913520, guid: 346c932364308404886de89ea0038861,
         type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -540,6 +540,7 @@ MonoBehaviour:
   blackoutBaseDuration: 0.1
   blackoutDurationDefault: 0.1
   speedTxt: {fileID: 0}
+  phoneDialogueManager: {fileID: 0}
   gameManagerScript: {fileID: 0}
   hasCrashed: 0
   allowDebugging: 0
@@ -1127,16 +1128,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -30
       objectReference: {fileID: 0}
-    - target: {fileID: 7430743012029689214, guid: a90f627c4a6a99f448c78d2f698fc164,
-        type: 3}
-      propertyPath: m_Animations.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7430743012029689214, guid: a90f627c4a6a99f448c78d2f698fc164,
-        type: 3}
-      propertyPath: m_Animation
-      value: 
-      objectReference: {fileID: 7400000, guid: 4e5086d7fada51c49a054fbde9172daf, type: 2}
     - target: {fileID: 7430743012029689214, guid: a90f627c4a6a99f448c78d2f698fc164,
         type: 3}
       propertyPath: m_Animations.Array.data[3]

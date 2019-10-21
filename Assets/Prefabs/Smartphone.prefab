@@ -490,7 +490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38ab211c1c6f47a4bb31f5ace10ae22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueCount: 0
+  dialogueCount: 1
 --- !u!111 &7430743012029689214
 Animation:
   m_ObjectHideFlags: 0
