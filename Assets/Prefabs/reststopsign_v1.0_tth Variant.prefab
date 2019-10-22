@@ -9,19 +9,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100008, guid: 17e36a4499a9978438d68e4cf595d296, type: 3}
       propertyPath: m_Name
-      value: reststopsign_v1.0_tth
+      value: reststopsign_v1.0_tth Variant
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 17e36a4499a9978438d68e4cf595d296, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 202.16113
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 17e36a4499a9978438d68e4cf595d296, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.700207e-18
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 17e36a4499a9978438d68e4cf595d296, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -181.40573
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400008, guid: 17e36a4499a9978438d68e4cf595d296, type: 3}
       propertyPath: m_LocalRotation.x
