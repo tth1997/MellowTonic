@@ -7,18 +7,59 @@ using UnityEngine.SceneManagement;
 
 public class EndSplash : MonoBehaviour
 {
-    public float wait_time = 45f;
+    [HideInInspector]
+    public Animator endTextAnimator;
+    
+    [HideInInspector]
+    public Animator rawImageAnimator;
+
+    bool sceneLoaded = false;
+
+    AsyncOperation asyncLoad;
 
     void Start()
     {
-        StartCoroutine(Wait_for_intro());
+        endTextAnimator = GameObject.Find("EndText").GetComponent<Animator>();
+
+        rawImageAnimator = GameObject.Find("RawImage").GetComponent<Animator>();
+
+        StartCoroutine(PreloadLevel());
     }
 
-    IEnumerator Wait_for_intro()
+    private void Update()
     {
-        yield return new WaitForSeconds(wait_time);
+        if (sceneLoaded && Input.GetKeyDown(KeyCode.Space))
+        {
+            rawImageAnimator.SetTrigger("TriggerEndStateFade");
 
-        SceneManager.LoadScene(0);
+            StartCoroutine(WaitForFade());
+        }
+    }
+
+    IEnumerator WaitForFade()
+    {
+        yield return new WaitForSeconds(3f);
+
+        asyncLoad.allowSceneActivation = true;
+    }
+
+    IEnumerator PreloadLevel()
+    {
+        yield return new WaitForSeconds(5f);
+
+        asyncLoad = SceneManager.LoadSceneAsync("MainMenu");
+
+        asyncLoad.allowSceneActivation = false;
+
+        while (asyncLoad.progress < 0.9f)
+        {
+            yield return null;
+        }
+
+        endTextAnimator.SetTrigger("TriggerEndText");
+
+        sceneLoaded = true;
+        //SceneManager.LoadScene(2);
     }
 }
 

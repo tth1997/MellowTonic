@@ -7,26 +7,44 @@ using UnityEngine.SceneManagement;
 
 public class SplashFade : MonoBehaviour
 {
-    public float wait_time;
+    [HideInInspector]
+    public Animator startTextAnimator;
 
-    float remainingTime;
+    bool sceneLoaded = false;
+
+    AsyncOperation asyncLoad;
 
     void Start()
     {
-        StartCoroutine(Wait_for_intro());
+        startTextAnimator = GameObject.Find("StartText").GetComponent<Animator>();
+
+        StartCoroutine(PreloadLevel());
     }
 
     private void Update()
     {
-
+        if (sceneLoaded && Input.GetKeyDown(KeyCode.Space))
+        {
+            asyncLoad.allowSceneActivation = true;
+        }
     }
 
-    IEnumerator Wait_for_intro()
+    IEnumerator PreloadLevel()
     {
-        yield return new WaitForSeconds(wait_time);
+        yield return new WaitForSeconds(5f);
 
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(2);
+        asyncLoad = SceneManager.LoadSceneAsync("Level");
 
+        asyncLoad.allowSceneActivation = false;
+
+        while (asyncLoad.progress < 0.9f)
+        {
+            yield return null;
+        }
+
+        startTextAnimator.SetTrigger("TriggerStartText");
+
+        sceneLoaded = true;
         //SceneManager.LoadScene(2);
     }
 }
