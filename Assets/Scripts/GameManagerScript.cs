@@ -8,7 +8,12 @@ public class GameManagerScript : MonoBehaviour
     [HideInInspector]
     public MouseController mouseController;
     public GameObject AICar;
-    bool paused = false;
+
+    [HideInInspector]
+    public GameObject menuCanvas;
+
+
+    public bool paused;
 
     int spawnLimit = 16;
     float spawnTimer;
@@ -20,9 +25,13 @@ public class GameManagerScript : MonoBehaviour
     {
         mouseController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<MouseController>();
 
+        menuCanvas = GameObject.Find("MenuCanvas");
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
+        paused = false;
+        menuCanvas.SetActive(false);
 
         spawnTimer = Time.time + 20f;
         isSpawning = false;
@@ -33,22 +42,7 @@ public class GameManagerScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            paused = !paused;
-
-            mouseController.paused = paused;
-
-            if (paused)
-            {
-                Cursor.visible = true;
-                Cursor.lockState = CursorLockMode.None;
-                Time.timeScale = 0f;
-            }
-            else
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-                Time.timeScale = 1f;
-            }
+            PauseCheck();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -63,6 +57,28 @@ public class GameManagerScript : MonoBehaviour
                 StartCoroutine(AICarSpawnCoroutine());
                 isSpawning = true;
             }
+        }
+    }
+
+    public void PauseCheck()
+    {
+        paused = !paused;
+
+        mouseController.paused = paused;
+
+        if (paused)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 0f;
+            menuCanvas.SetActive(true);
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Time.timeScale = 1f;
+            menuCanvas.SetActive(false);
         }
     }
 
@@ -168,6 +184,7 @@ public class GameManagerScript : MonoBehaviour
     public void Crash()
     {
         Debug.Log("Crashed!");
-        SceneManager.LoadScene(3);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("EndState");
     }
 }
