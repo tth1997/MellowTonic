@@ -5,38 +5,40 @@ using UnityEngine;
 public class phoneanimation : MonoBehaviour
 {
     private Animation anim;
-    public bool holdUp;
-    
-    // Start is called before the first frame update
+    [HideInInspector]
+    public bool holdUp = false;
+
+    PhoneDialogueManager phoneDialogueManager;
+
     void Start()
     {
         anim = GetComponent<Animation>();
+        phoneDialogueManager = GetComponentInChildren<PhoneDialogueManager>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        TogglePhone();
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            phoneDialogueManager.PlayAnimation();
+        }
     }
 
     public void TogglePhone()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (!holdUp)
         {
-
-            if (!holdUp)
-            {
-                // play phone animation 
-                anim.Play("phone_pullUp");
-                holdUp = true;
-            }
-
-            else
-            {
-                // play pull down animation
-                anim.Play("phone_pullDown");
-                holdUp = false;
-            }
+            // play phone animation 
+            anim.Play("phone_pullUp");
+            holdUp = true;
+            Debug.Log("Phone was toggled up.");
+        }
+        else
+        {
+            // play pull down animation
+            anim.Play("phone_pullDown");
+            holdUp = false;
+            Debug.Log("Phone was toggled down.");
         }
     }
 }

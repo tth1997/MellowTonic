@@ -20,7 +20,7 @@ public class CarMovementScript : MonoBehaviour
     public float pid_Kd1 = 1f;
     public float pid_maxMotorForce;
     public float pid_minMotorForce;
-
+    [HideInInspector]
     public bool slowed;
 
     // Steering PID
@@ -124,9 +124,14 @@ public class CarMovementScript : MonoBehaviour
     bool fadingOut;
 
     // Text & UI
+    [HideInInspector]
     public Text speedTxt;
     [HideInInspector]
     public PhoneDialogueManager phoneDialogueManager;
+
+    // Audio
+    AudioSource radio;
+    bool radioOn;
 
     // End-State & Game Management
     [HideInInspector]
@@ -175,10 +180,13 @@ public class CarMovementScript : MonoBehaviour
 
         phoneDialogueManager = GetComponentInChildren<PhoneDialogueManager>();
 
+        radio = GetComponent<AudioSource>();
+
         gameManagerScript = GameObject.Find("EventSystem").GetComponent<GameManagerScript>();
 
         PIDActive = false;
         freeLook = false;
+        radioOn = true;
     }
 
     private void InitializeAccelPID()
@@ -212,7 +220,14 @@ public class CarMovementScript : MonoBehaviour
 
     void Accelerate()
     {
-        if (slowed)
+        if (phoneDialogueManager.isPlayingAnim)
+        {
+            maxTargetVel = 0f;
+            targetVel = Mathf.Clamp(carVel,
+                        0,
+                        maxTargetVel);
+        }
+        else if (slowed)
         {
             maxTargetVel = 11.11f;
         }
@@ -220,6 +235,8 @@ public class CarMovementScript : MonoBehaviour
         {
             maxTargetVel = 33.33f;
         }
+
+
 
         // Acceleration & Reverse
 
@@ -255,7 +272,7 @@ public class CarMovementScript : MonoBehaviour
             frontRightW.brakeTorque = brakeForce;
             targetVel = carVel;
         }
-        else if (verticalInput == 0 && carVel < 0.25f)
+        else if (verticalInput == 0 && carVel < 0.25f || phoneDialogueManager.isPlayingAnim)
         {
             frontLeftW.brakeTorque = brakeForce;
             frontRightW.brakeTorque = brakeForce;
@@ -276,6 +293,20 @@ public class CarMovementScript : MonoBehaviour
         else
         {
             freeLook = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (radioOn)
+            {
+                radioOn = !radioOn;
+                radio.Pause();
+            }
+            else
+            {
+                radioOn = !radioOn;
+                radio.UnPause();
+            }
         }
     }
         // END UPDATE BLOCK //
@@ -483,11 +514,6 @@ public class CarMovementScript : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "SlowSpeedTrigger")
-        {
-            slowed = true;
-        }
-
         if (other.tag == "RestStopTrigger")
         {
             phoneDialogueManager.PlayAnimation();
@@ -498,6 +524,13 @@ public class CarMovementScript : MonoBehaviour
         if (other.tag == "SlowSpeedTrigger")
         {
             slowed = false;
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "SlowSpeedTrigger")
+        {
+            slowed = true;
         }
     }
 }

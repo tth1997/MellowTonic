@@ -7,11 +7,17 @@ public class PhoneDialogueManager : MonoBehaviour
     private Animation dialogueScroll;
     public int dialogueCount;
 
+    phoneanimation phoneAnimation;
+
+    [HideInInspector]
+    public bool isPlayingAnim = false;
+
     // Start is called before the first frame update
     void Start()
     {
         dialogueCount = 1;
         dialogueScroll = GetComponent <Animation>();
+        phoneAnimation = GetComponentInParent<phoneanimation>();
 
     }
 
@@ -23,10 +29,32 @@ public class PhoneDialogueManager : MonoBehaviour
 
     public void PlayAnimation()
     {
+        isPlayingAnim = true;
+        StartCoroutine(PullUpPhoneCoroutine());
 
-        dialogueScroll.Play("TextScrollAni" + dialogueCount.ToString());
         Debug.Log("Dialogue Animation: " + dialogueCount);
 
+
+    }
+
+
+
+
+    IEnumerator PullUpPhoneCoroutine()
+    {
+        phoneAnimation.TogglePhone();
+
+        yield return new WaitForSeconds(2f);
+
+        dialogueScroll.Play("TextScrollAni" + dialogueCount.ToString());
+
+        while (dialogueScroll.isPlaying)
+        {
+            yield return null;
+        }
         dialogueCount++;
+        isPlayingAnim = false;
+
+        phoneAnimation.TogglePhone();
     }
 }

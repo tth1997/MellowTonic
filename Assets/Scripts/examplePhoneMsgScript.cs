@@ -43,7 +43,7 @@ public class examplePhoneMsgScript : MonoBehaviour
     void Start()
     {
         scrollAnim = GetComponent<Animation>();
-
+        scrollAmount = 1.0f;
 
 
         gasStationDialogueLinesLH = new List<string>(new string[]

@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class TutorialText : MonoBehaviour
 {
-    public Text tutorialText;
+    Text tutorialText;
+    Animator tutorialAnimator;
+
     GameObject playerCar;
     TutorialManager tutorialManager;
     public int _tutorialCount;
@@ -16,12 +18,11 @@ public class TutorialText : MonoBehaviour
     {
         playerCar = GameObject.Find("PlayerCar");
 
+        tutorialText = GetComponentInChildren<Text>();
+        tutorialAnimator = GetComponent<Animator>();
+
         tutorialManager = playerCar.GetComponent<TutorialManager>();
         _tutorialCount = tutorialManager.tutorialCount;
-
-        
-
-
     }
 
     // Update is called once per frame
@@ -29,6 +30,15 @@ public class TutorialText : MonoBehaviour
     {
         CheckCount();
         DisplayText();
+    }
+
+    public void TutorialFadeIn()
+    {
+        tutorialAnimator.SetBool("BoolFade", true);
+    }
+    public void TutorialFadeOut()
+    {
+        tutorialAnimator.SetBool("BoolFade", false);
     }
 
     void CheckCount()
@@ -57,19 +67,28 @@ public class TutorialText : MonoBehaviour
 
         if (_tutorialCount == 3)
         {
-            tutorialText.text = "Use 'space bar' to brake.";
+            tutorialText.text = "Use 'Space Bar' to brake.";
 
         }
 
         if (_tutorialCount == 4)
         {
-            tutorialText.text = "Holding 'Right Click' will allow free look movement.";
-
+            tutorialText.text = "Hold 'Right Mouse Button' to free look without steering.";
         }
 
         if (_tutorialCount == 5)
         {
-            tutorialText.text = "Pressing 'Q' will bring up phone";
+            tutorialText.text = "Press 'Q' to bring up phone.";
+        }
+
+        if (_tutorialCount == 6)
+        {
+            tutorialText.text = "Press 'R' to toggle the radio.";
+        }
+
+        if (_tutorialCount == 7)
+        {
+            tutorialText.text = "Rest stops will lower your fatigue.";
         }
     }
 }

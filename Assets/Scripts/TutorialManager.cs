@@ -7,28 +7,23 @@ public class TutorialManager : MonoBehaviour
     public bool usingTutorial;
     public int tutorialCount;
     [HideInInspector]
-    public GameObject tutorial;
+    public TutorialText tutorialTextScript;
 
     // Start is called before the first frame update
     void Start()
     {
         
-        tutorialCount = 0;
+        tutorialCount = -1;
 
-        tutorial = GameObject.Find("Tutorial");
-        tutorial.SetActive(false);
+        tutorialTextScript = GameObject.Find("Tutorial").GetComponent<TutorialText>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "TutorialTrigger")
+        if (other.tag == "TutorialTrigger")
         {
-            tutorial.SetActive(true);
+            tutorialTextScript.TutorialFadeIn();
+            tutorialCount++;
         }        
     }
 
@@ -36,9 +31,8 @@ public class TutorialManager : MonoBehaviour
     {
         if (other.tag == "TutorialTrigger")
         {
-            tutorial.SetActive(false);
-            tutorialCount++;
-            Debug.Log(tutorialCount);
+            tutorialTextScript.TutorialFadeOut();
+            Debug.Log("Tutorial counter: " + tutorialCount);
         }
     }
 }

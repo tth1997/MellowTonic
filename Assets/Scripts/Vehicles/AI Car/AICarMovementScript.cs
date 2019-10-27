@@ -188,7 +188,8 @@ public class AICarMovementScript : MonoBehaviour
         
         if ((transform.position - playerCarTransform.position).sqrMagnitude > Mathf.Pow(maxPlayerDistance, 2))
         {
-            Destroy(carAgentTransform.gameObject);
+            if (carAgentTransform.gameObject)
+                Destroy(carAgentTransform.gameObject);
             Destroy(gameObject);
 
             
@@ -197,7 +198,8 @@ public class AICarMovementScript : MonoBehaviour
 
         if ((transform.position - waypointCurrent.position).sqrMagnitude < Mathf.Pow(10, 2))
         {
-            Destroy(carAgentTransform.gameObject);
+            if (carAgentTransform.gameObject)
+                Destroy(carAgentTransform.gameObject);
             Destroy(gameObject);
 
             Debug.Log("AI car despawned.");

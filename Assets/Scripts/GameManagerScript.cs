@@ -45,9 +45,9 @@ public class GameManagerScript : MonoBehaviour
             PauseCheck();
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.R) && Application.isEditor)
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene("Level");
         }
 
         if (spawnAI)
