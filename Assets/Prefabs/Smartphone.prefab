@@ -178,33 +178,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: '
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    So, what would you like for dinner, honey?
+  m_Text: 'So, what do you feel like for dinner?
 
 
 
@@ -219,7 +193,13 @@ MonoBehaviour:
 
 
 
+
     Great choice! I''ll get to it :)
+
+
+
+
+
 
 
 
@@ -316,11 +296,11 @@ Animation:
   m_GameObject: {fileID: 7430743011530021133}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 0}
+  m_Animation: {fileID: 7400000, guid: 6493bc0cf2c01b642be98267bd084ab6, type: 2}
   m_Animations:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 7400000, guid: fa2bef7cd2df7554daf48abd11d9d402, type: 2}
+  - {fileID: 7400000, guid: bef07780669170448929adee277686a7, type: 2}
+  - {fileID: 7400000, guid: 6493bc0cf2c01b642be98267bd084ab6, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
@@ -383,7 +363,7 @@ GameObject:
   - component: {fileID: 7430743012029689088}
   - component: {fileID: 7430743012029689089}
   - component: {fileID: 7430743012029689214}
-  - component: {fileID: 9019182360820470331}
+  - component: {fileID: 1289438488611485052}
   m_Layer: 5
   m_Name: PhoneMessageCanvas
   m_TagString: Untagged
@@ -507,17 +487,17 @@ Animation:
   m_GameObject: {fileID: 7430743012029689215}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 0}
+  m_Animation: {fileID: 7400000, guid: 6493bc0cf2c01b642be98267bd084ab6, type: 2}
   m_Animations:
-  - {fileID: 7400000, guid: 3d1e8153b44c1ed45845184308ab1ac1, type: 2}
-  - {fileID: 7400000, guid: 9c7507bf462c27a4f8858a734f0f6381, type: 2}
-  - {fileID: 7400000, guid: 875fb0dc60f55bf45842ec0f636059f2, type: 2}
-  - {fileID: 7400000, guid: b5f1f0e62a14f2549ac74daa27b51380, type: 2}
+  - {fileID: 7400000, guid: 909efebc63eea3445bc0068016e90563, type: 2}
+  - {fileID: 7400000, guid: b921476a30ad90f4890539f886ef0c78, type: 2}
+  - {fileID: 7400000, guid: eac53137281dae848ab6adcce5c982d2, type: 2}
+  - {fileID: 7400000, guid: 6493bc0cf2c01b642be98267bd084ab6, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 0
+  m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
---- !u!114 &9019182360820470331
+--- !u!114 &1289438488611485052
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -526,7 +506,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7430743012029689215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da6238647142cd9449c939c2494f67c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 38ab211c1c6f47a4bb31f5ace10ae22a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueCount: 0
@@ -759,31 +739,6 @@ MonoBehaviour:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     Something wtih less veg than last night.
 
 
@@ -798,6 +753,12 @@ MonoBehaviour:
 
 
     Guess I''ll take the salad then...
+
+
+
+
+
+
 
 
 
