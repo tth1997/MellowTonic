@@ -37,7 +37,7 @@ public class Speedometer : MonoBehaviour {
 
     private void HandlePlayerInput() {
         if (Input.GetKey(KeyCode.W)) {
-            float acceleration = 80f;
+            float acceleration = 20f;
             speed += acceleration * Time.deltaTime;
         } else {
             float deceleration = 20f;
