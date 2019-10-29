@@ -8,8 +8,6 @@ public class GameManagerScript : MonoBehaviour
     [HideInInspector]
     public MouseController mouseController;
     public GameObject AICar;
-
-    [HideInInspector]
     public GameObject menuCanvas;
 
 
@@ -25,13 +23,14 @@ public class GameManagerScript : MonoBehaviour
     {
         mouseController = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<MouseController>();
 
-        menuCanvas = GameObject.Find("MenuCanvas");
-
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         Time.timeScale = 1f;
         paused = false;
-        menuCanvas.SetActive(false);
+        if (menuCanvas)
+        {
+            menuCanvas.SetActive(false);
+        }
 
         spawnTimer = Time.time + 20f;
         isSpawning = false;

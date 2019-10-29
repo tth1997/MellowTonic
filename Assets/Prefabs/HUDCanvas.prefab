@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 20372727755688752}
   - component: {fileID: 20372727755688755}
   - component: {fileID: 4569987897791254578}
+  - component: {fileID: 496141759018226784}
   m_Layer: 5
   m_Name: Tutorial
   m_TagString: Untagged
@@ -134,7 +135,7 @@ Animator:
   m_GameObject: {fileID: 20372727755688753}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6d555b4bd66744567b5f923d65818a81, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -143,6 +144,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!111 &496141759018226784
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20372727755688753}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: d5fbe990a3d3e4bc982038443fd7a4c8, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: d5fbe990a3d3e4bc982038443fd7a4c8, type: 2}
+  - {fileID: 7400000, guid: 02ac8c3175fa2451bacfab62236609a2, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &20372728449723603
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,11 +625,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2137159089212139087}
     m_Modifications:
-    - target: {fileID: 5680395724331517781, guid: c2f43adc6ef3d4e3989c8a913e444c98,
-        type: 3}
-      propertyPath: m_Name
-      value: Speedometer
-      objectReference: {fileID: 0}
     - target: {fileID: 5680395724331517780, guid: c2f43adc6ef3d4e3989c8a913e444c98,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -716,6 +729,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5680395724331517781, guid: c2f43adc6ef3d4e3989c8a913e444c98,
+        type: 3}
+      propertyPath: m_Name
+      value: Speedometer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c2f43adc6ef3d4e3989c8a913e444c98, type: 3}

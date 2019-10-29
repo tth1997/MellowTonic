@@ -78,17 +78,17 @@ public class TutorialText : MonoBehaviour
 
         if (_tutorialCount == 5)
         {
-            tutorialText.text = "Press 'Q' to bring up phone.";
+            tutorialText.text = "Press 'R' to toggle the radio.";
         }
 
         if (_tutorialCount == 6)
         {
-            tutorialText.text = "Press 'R' to toggle the radio.";
+            tutorialText.text = "Rest stops will lower your fatigue.";
         }
 
         if (_tutorialCount == 7)
         {
-            tutorialText.text = "Rest stops will lower your fatigue.";
+            tutorialText.text = "Press 'Tab' to pause the game.";
         }
     }
 }

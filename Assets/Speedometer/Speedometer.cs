@@ -12,6 +12,8 @@ public class Speedometer : MonoBehaviour {
     private Transform needleTranform;
     private Transform speedLabelTemplateTransform;
 
+    public GameObject player;
+
     private float speedMax;
     private float speed;
 
@@ -36,20 +38,8 @@ public class Speedometer : MonoBehaviour {
     }
 
     private void HandlePlayerInput() {
-        if (Input.GetKey(KeyCode.W)) {
-            float acceleration = 20f;
-            speed += acceleration * Time.deltaTime;
-        } else {
-            float deceleration = 20f;
-            speed -= deceleration * Time.deltaTime;
-        }
 
-        if (Input.GetKey(KeyCode.S)) {
-            float brakeSpeed = 100f;
-            speed -= brakeSpeed * Time.deltaTime;
-        }
-
-        speed = Mathf.Clamp(speed, 0f, speedMax);
+        speed = Mathf.Clamp(player.GetComponent<CarMovementScript>().carVel * 3.6f, 0f, speedMax);
     }
 
     private void CreateSpeedLabels() {

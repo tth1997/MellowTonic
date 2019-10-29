@@ -74,7 +74,7 @@ public class CarMovementScript : MonoBehaviour
     // Fatigue Effects for Steering
     [HideInInspector]
     public float swayTimer;                             // RESET THIS TO Time.time + CarMovementScript.swayTimerDefault AT REST STOP
-    public float swayTimerDefault = 60; 
+    public float swayTimerDefault = 60;
 
     [HideInInspector]
     public float currentAccelSwayMagnitude;             // RESET THIS TO 0 AT REST STOP
@@ -124,9 +124,7 @@ public class CarMovementScript : MonoBehaviour
     bool fadingOut;
 
     // Text & UI
-    [HideInInspector]
     public Text speedTxt;
-    [HideInInspector]
     public PhoneDialogueManager phoneDialogueManager;
 
     // Audio
@@ -143,7 +141,7 @@ public class CarMovementScript : MonoBehaviour
     public bool allowDebugging;
 
 
-        // START BLOCK //
+    // START BLOCK //
     void Start()
     {
         InitializeVariables();
@@ -176,11 +174,14 @@ public class CarMovementScript : MonoBehaviour
         blackoutImg.color = Color.clear;
         fadeColor = Color.clear;
 
-        speedTxt = GameObject.Find("SpeedTxt").GetComponent<Text>();
 
-        phoneDialogueManager = GetComponentInChildren<PhoneDialogueManager>();
 
         radio = GetComponent<AudioSource>();
+
+
+
+
+
 
         gameManagerScript = GameObject.Find("EventSystem").GetComponent<GameManagerScript>();
 
@@ -206,9 +207,9 @@ public class CarMovementScript : MonoBehaviour
         SteerPID.outputMin = -pid_maxSteerAngle;
         SteerPID.steeringDamp = pid_steeringDamp;
     }
-        // END START BLOCK //
+    // END START BLOCK //
 
-        // UPDATE BLOCK //
+    // UPDATE BLOCK //
     void Update()
     {
         if (speedTxt != null)
@@ -244,7 +245,7 @@ public class CarMovementScript : MonoBehaviour
         {
             PIDActive = false;
             targetVel = Mathf.Clamp(carVel,
-                                    0, 
+                                    0,
                                     maxTargetVel);
         }
         else
@@ -309,9 +310,9 @@ public class CarMovementScript : MonoBehaviour
             }
         }
     }
-        // END UPDATE BLOCK //
+    // END UPDATE BLOCK //
 
-        // FIXEDUPDATE BLOCK //
+    // FIXEDUPDATE BLOCK //
     // Note that the FixedUpdate loop runs at 50 frames per second by default.
     private void FixedUpdate()
     {
@@ -347,8 +348,8 @@ public class CarMovementScript : MonoBehaviour
     {
         SteerPID.steeringSwayMagnitude = currentSteerSwayMagnitude;
 
-        currentSteerSwayMagnitude = Mathf.Clamp(currentSteerSwayMagnitude + steerSwayMagnitudeRate * Time.fixedDeltaTime, 
-                                                0, 
+        currentSteerSwayMagnitude = Mathf.Clamp(currentSteerSwayMagnitude + steerSwayMagnitudeRate * Time.fixedDeltaTime,
+                                                0,
                                                 steerSwayMagnitudeLimit);
     }
     void AcceleratorSway()
@@ -362,12 +363,12 @@ public class CarMovementScript : MonoBehaviour
     void CamBlur()
     {
         // Blur
-        currentFocusDistance = Mathf.Clamp(currentFocusDistance - (focusDistanceRate * Time.fixedDeltaTime), 
+        currentFocusDistance = Mathf.Clamp(currentFocusDistance - (focusDistanceRate * Time.fixedDeltaTime),
                                            focusDistanceMin,
                                            focusDistanceMax);
 
         depthOfField.focusDistance.value = currentFocusDistance;
-        
+
         // Vignette
         vignetteIntensity = Mathf.Clamp(vignetteIntensity - (vignetteRate * Time.fixedDeltaTime),
                                         0,
@@ -375,7 +376,7 @@ public class CarMovementScript : MonoBehaviour
 
         vignette.intensity.value = vignetteIntensity;
 
-        
+
     }
     void CamBlackout()
     {
@@ -442,7 +443,7 @@ public class CarMovementScript : MonoBehaviour
     {
         // If player right-clicks, the steeringAngle will not recieve any new data, which allows
         // the player to move the camera around without steering the car.
-        
+
         if (!freeLook)
         {
             steerRotation = mouseRigObject.GetComponent<MouseController>().mouseAimTransform.eulerAngles.y;
@@ -600,11 +601,11 @@ public class CarSteeringPID
         var error = Mathf.DeltaAngle(currentDirection, targetDirection);
         integral = Mathf.Clamp(integral + error + Dt, outputMin, outputMax);
         derivative = (error - preError) / Dt;
-        
+
         steeringSway += (Mathf.PI / steeringSwayPeriod) * Time.fixedDeltaTime;
         if (steeringSway >= 2 * Mathf.PI)
             steeringSway = 0f;
-      
+
         output = Mathf.Clamp((error * Kp + integral * Ki + derivative * Kd) * steeringDamp, outputMin, outputMax);
 
         preError = error;

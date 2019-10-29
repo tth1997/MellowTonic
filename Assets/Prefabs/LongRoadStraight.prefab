@@ -42,10 +42,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6905687310896685713}
     m_Modifications:
-    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
-      propertyPath: m_Name
-      value: Road_Streight_Double (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.32562256
@@ -98,6 +94,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_Name
+      value: Road_Streight_Double (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
 --- !u!4 &1783737995076101415 stripped
@@ -113,10 +117,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6905687310896685713}
     m_Modifications:
-    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
-      propertyPath: m_Name
-      value: Road_Streight_Double (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -30.325623
@@ -169,6 +169,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_Name
+      value: Road_Streight_Double (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
 --- !u!4 &1783737996426081758 stripped
@@ -184,10 +192,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6905687310896685713}
     m_Modifications:
-    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
-      propertyPath: m_Name
-      value: Road_Streight_Double (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 59.619995
@@ -240,6 +244,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_Name
+      value: Road_Streight_Double (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
 --- !u!4 &1783737996671293891 stripped
@@ -255,10 +267,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6905687310896685713}
     m_Modifications:
-    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
-      propertyPath: m_Name
-      value: Road_Streight_Double (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
       propertyPath: m_LocalPosition.x
       value: -60.325623
@@ -311,6 +319,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_Name
+      value: Road_Streight_Double (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
 --- !u!4 &1783737996687873597 stripped
@@ -326,10 +342,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6905687310896685713}
     m_Modifications:
-    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
-      propertyPath: m_Name
-      value: Road_Streight_Double (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 29.674377
@@ -381,6 +393,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
       propertyPath: m_LocalScale.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_Name
+      value: Road_Streight_Double (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 119
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21456eb7a6b18e4480b596463b9692a, type: 3}
