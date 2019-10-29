@@ -31,7 +31,7 @@ public class SplashFade : MonoBehaviour
 
     IEnumerator PreloadLevel()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(0.1f);
 
         asyncLoad = SceneManager.LoadSceneAsync("Level");
 
