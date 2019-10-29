@@ -18,10 +18,7 @@ public class phoneanimation : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            phoneDialogueManager.PlayAnimation();
-        }
+
     }
 
     public void TogglePhone()

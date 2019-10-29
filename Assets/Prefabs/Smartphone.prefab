@@ -236,12 +236,13 @@ Animation:
   m_GameObject: {fileID: 7430743011530021133}
   m_Enabled: 1
   serializedVersion: 3
-  m_Animation: {fileID: 0}
+  m_Animation: {fileID: 7400000, guid: d6a8be2f735fa4097a45a4b7af3d2746, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: d99b6e2dd7a104cc3b1edf6fd3f1e9b2, type: 2}
   - {fileID: 7400000, guid: 8dfc45f60c113463cbd4391d756011fc, type: 2}
+  - {fileID: 7400000, guid: d6a8be2f735fa4097a45a4b7af3d2746, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 0
+  m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!114 &4059949647765757399
@@ -432,7 +433,7 @@ Animation:
   - {fileID: 7400000, guid: e2d1b1617f0d34397a3a1e80120581c2, type: 2}
   - {fileID: 7400000, guid: 3ff954553b2d049b2a1eb9b9b10e02a8, type: 2}
   m_WrapMode: 0
-  m_PlayAutomatically: 1
+  m_PlayAutomatically: 0
   m_AnimatePhysics: 0
   m_CullingType: 0
 --- !u!114 &8521281390093521836
