@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 3f6a2db8816d26b47ad689baf293a0df
-timeCreated: 1438111224
-licenseType: Store
 TextureImporter:
   fileIDToRecycleName:
     21300000: arrow1
@@ -28,52 +26,78 @@ TextureImporter:
     21300042: bow1
     21300044: button_hover
     21300046: textfield
-  serializedVersion: 2
+  externalObjects: {}
+  serializedVersion: 9
   mipmaps:
     mipMapMode: 0
     enableMipMap: 1
+    sRGBTexture: 1
     linearTexture: 0
-    correctGamma: 0
     fadeOut: 0
     borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
     mipMapFadeDistanceStart: 1
     mipMapFadeDistanceEnd: 3
   bumpmap:
     convertToNormalMap: 0
     externalNormalMap: 0
-    heightScale: .25
+    heightScale: 0.25
     normalMapFilter: 0
   isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
   grayScaleToAlpha: 0
-  generateCubemap: 0
+  generateCubemap: 6
   cubemapConvolution: 0
-  cubemapConvolutionSteps: 8
-  cubemapConvolutionExponent: 1.5
   seamlessCubemap: 0
   textureFormat: -3
   maxTextureSize: 2048
   textureSettings:
+    serializedVersion: 2
     filterMode: -1
     aniso: 16
-    mipBias: -1
-    wrapMode: 1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
-  rGBM: 0
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: .5, y: .5}
-  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 250
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
   alphaIsTransparency: 1
+  spriteTessellationDetail: -1
   textureType: 8
-  buildTargetSettings: []
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
+    serializedVersion: 2
     sprites:
-    - name: arrow1
+    - serializedVersion: 2
+      name: arrow1
       rect:
         serializedVersion: 2
         x: 7
@@ -81,9 +105,19 @@ TextureImporter:
         width: 314
         height: 411
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: bow
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17c496ca4139ce14fa712b19384c18f2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bow
       rect:
         serializedVersion: 2
         x: 351
@@ -91,9 +125,19 @@ TextureImporter:
         width: 346
         height: 504
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: background_scroll_bar
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ca26f0db7753444789633a8408e35f3
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: background_scroll_bar
       rect:
         serializedVersion: 2
         x: 724
@@ -101,9 +145,19 @@ TextureImporter:
         width: 85
         height: 67
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 9, y: 12, z: 10, w: 10}
-    - name: toggle
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfc611db621a4b9459dbd3f358acfea7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: toggle
       rect:
         serializedVersion: 2
         x: 845
@@ -111,9 +165,19 @@ TextureImporter:
         width: 150
         height: 150
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: window1
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cdea642be091634ca3605b2498b5af2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: window1
       rect:
         serializedVersion: 2
         x: 1018
@@ -121,9 +185,19 @@ TextureImporter:
         width: 1016
         height: 1018
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 37, y: 33, z: 40, w: 31}
-    - name: progrees_bar
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f35fa12e8ad53c4c98eb03b18f3b02c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: progrees_bar
       rect:
         serializedVersion: 2
         x: 719
@@ -131,9 +205,19 @@ TextureImporter:
         width: 96
         height: 79
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 12, y: 12, z: 14, w: 14}
-    - name: progrees_bar2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8b4618748d8244419a7f0e557f8c5e3
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: progrees_bar2
       rect:
         serializedVersion: 2
         x: 721
@@ -141,9 +225,19 @@ TextureImporter:
         width: 95
         height: 78
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 11, y: 14, z: 14, w: 13}
-    - name: toggle1
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c5e92009d104bf4e978f1e9bf4c441a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: toggle1
       rect:
         serializedVersion: 2
         x: 846
@@ -151,9 +245,19 @@ TextureImporter:
         width: 150
         height: 150
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: progrees_bar3
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c97f014f03779ea418ba701b2726d3f8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: progrees_bar3
       rect:
         serializedVersion: 2
         x: 721
@@ -161,9 +265,19 @@ TextureImporter:
         width: 96
         height: 79
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 11, y: 14, z: 16, w: 12}
-    - name: joystick1
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b424a5451a491b408f39c1a99ee2344
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: joystick1
       rect:
         serializedVersion: 2
         x: 851
@@ -171,9 +285,19 @@ TextureImporter:
         width: 143
         height: 143
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: progrees_bar4
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74b813a715f4e6846ac454cfea0a07e0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: progrees_bar4
       rect:
         serializedVersion: 2
         x: 717
@@ -181,9 +305,19 @@ TextureImporter:
         width: 96
         height: 79
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 12, y: 14, z: 15, w: 14}
-    - name: arrow2
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d529131f12f3b574d8301b5a7ec1f66f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: arrow2
       rect:
         serializedVersion: 2
         x: 6
@@ -191,9 +325,19 @@ TextureImporter:
         width: 315
         height: 411
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: joystick
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ad8e226be860b549ac43840e1a8a2a7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: joystick
       rect:
         serializedVersion: 2
         x: 856
@@ -201,9 +345,19 @@ TextureImporter:
         width: 143
         height: 143
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: play
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2137467576c92ac4184c9aec1f2cf48b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: play
       rect:
         serializedVersion: 2
         x: 8
@@ -211,9 +365,19 @@ TextureImporter:
         width: 193
         height: 193
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: pause
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 680d23688fc16914db6b2d0b87485356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pause
       rect:
         serializedVersion: 2
         x: 256
@@ -221,9 +385,19 @@ TextureImporter:
         width: 193
         height: 193
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: button_locked
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7d1518343a467343a8982eb5ce8a3e8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_locked
       rect:
         serializedVersion: 2
         x: 484
@@ -231,9 +405,19 @@ TextureImporter:
         width: 510
         height: 177
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 33, y: 33, z: 32, w: 31}
-    - name: button_pressed
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb57656f532bb8b439e279d2ad205d0a
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_pressed
       rect:
         serializedVersion: 2
         x: 487
@@ -241,9 +425,19 @@ TextureImporter:
         width: 510
         height: 177
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 28, y: 29, z: 38, w: 31}
-    - name: window
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e58656ef8bbea4342a6858ee2bcf438f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: window
       rect:
         serializedVersion: 2
         x: 1018
@@ -251,9 +445,19 @@ TextureImporter:
         width: 1016
         height: 1021
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 39, y: 37, z: 43, w: 112}
-    - name: play_pressed
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 917c4710f6fb11c4a97c8b069ce43fa8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: play_pressed
       rect:
         serializedVersion: 2
         x: 8
@@ -261,9 +465,19 @@ TextureImporter:
         width: 193
         height: 193
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: pause_pressed
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f7d42e2d3a866d45b63baad27d613f7
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pause_pressed
       rect:
         serializedVersion: 2
         x: 256
@@ -271,9 +485,19 @@ TextureImporter:
         width: 193
         height: 193
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: button
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a741a42dfb1edd4496134768079d89e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button
       rect:
         serializedVersion: 2
         x: 484
@@ -281,9 +505,19 @@ TextureImporter:
         width: 510
         height: 177
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 28, y: 36, z: 35, w: 30}
-    - name: bow1
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea840a7508a135d45b17b05c3139d3a3
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bow1
       rect:
         serializedVersion: 2
         x: 59
@@ -291,9 +525,19 @@ TextureImporter:
         width: 346
         height: 504
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: button_hover
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23b550c3b0a7893488e7548e149988a4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_hover
       rect:
         serializedVersion: 2
         x: 484
@@ -301,9 +545,19 @@ TextureImporter:
         width: 510
         height: 177
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 33, y: 36, z: 31, w: 35}
-    - name: textfield
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db58006bd2e7a5349a3ef5661629b636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: textfield
       rect:
         serializedVersion: 2
         x: 449
@@ -311,9 +565,28 @@ TextureImporter:
         width: 551
         height: 554
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 30, y: 24, z: 24, w: 20}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2481068f1a14f104ab69e5dc7c0e7379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
   spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
